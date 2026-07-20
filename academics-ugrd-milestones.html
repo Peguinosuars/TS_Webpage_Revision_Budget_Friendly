@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Milestones - Technology and Society</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .sub-banner { 
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    
+    .sidebar-accordion { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+    .accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background-color: #fff; color: var(--suny-navy); font-weight: bold; font-size: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .accordion-header:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .accordion-header span { font-size: 0.8rem; transition: transform 0.3s; }
+
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; list-style: none; padding-left: 10px; }
+    .accordion-content li a { display: block; padding: 10px 15px; color: #555; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid #edf2f7; transition: all 0.2s; }
+    .accordion-content li a:hover { color: var(--suny-red); padding-left: 20px; }
+    
+    .accordion-content li a.active { color: var(--sidebar-active-blue); font-weight: bold; }
+    .accordion-content li a.active::before { content: "• "; color: var(--sidebar-active-blue); }
+
+    .accordion-item.open .accordion-header { background-color: #edf2f7; color: var(--suny-navy); }
+    .accordion-item.open .accordion-header span { transform: rotate(180deg); }
+    .accordion-item.open .accordion-content { max-height: 200px; }
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-red); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.2rem; color: var(--suny-navy); font-weight: 700; }
+    
+    .content-container { background: white; padding: 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: none; }
+    .drawer-overlay.show { display: block; }
+    .nav-drawer { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: #ffffff; box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 2002; transition: right 0.3s ease; padding: 40px 20px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .menu-category { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; }
+    .menu-category h3 { font-size: 1rem; color: var(--suny-navy); cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+    .menu-category h3:hover { color: var(--suny-red); }
+    .menu-category h3 .arrow { font-size: 0.8rem; transition: transform 0.3s ease; color: #999; }
+    .menu-category.active h3 .arrow { transform: rotate(180deg); color: var(--suny-red); }
+    .drawer-sub-menu { list-style: none; padding-left: 12px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .menu-category.active .drawer-sub-menu { max-height: 600px; margin-top: 6px; }
+    .drawer-sub-menu li { margin: 6px 0; }
+    .drawer-sub-menu a { display: block; padding: 4px 0; font-size: 0.92rem; color: #555; font-weight: 500; }
+    .drawer-sub-menu a:hover { color: var(--suny-red); padding-left: 4px; }
+
+    .section-title { font-size: 1.6rem; color: var(--suny-navy); font-weight: 700; margin-bottom: 25px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .overview-table { width: 100%; border-collapse: collapse; margin-bottom: 35px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #cbd5e1; }
+    .overview-table th { background: var(--suny-navy); color: #fff; padding: 15px; font-weight: 700; font-size: 1.1rem; text-align: center; width: 50%; border: 1px solid var(--suny-navy); }
+    .overview-table td { padding: 22px; vertical-align: top; border: 1px solid #cbd5e1; background: #f8fafc; }
+    .overview-table tr:nth-child(even) td { background: #ffffff; }
+    .overview-year-title { font-size: 1.15rem; color: var(--suny-red); font-weight: 800; margin-bottom: 12px; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; }
+    
+    .course-list { list-style: none; padding-left: 5px; }
+    .course-list li { font-size: 0.95rem; color: #334155; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; display: flex; justify-content: space-between; }
+    .course-list li:last-child { border-bottom: none; }
+
+    .spec-accordion { margin-bottom: 35px; display: flex; flex-direction: column; gap: 12px; }
+    .spec-item { border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    
+    .spec-trigger { width: 100%; padding: 18px 25px; background: #ffffff; color: var(--suny-navy); border: none; outline: none; text-align: left; font-size: 1.2rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease; }
+    .spec-trigger:hover { background: #f8fafc; color: var(--suny-red); }
+    .spec-trigger .icon { font-size: 0.9rem; transition: transform 0.3s ease; color: #64748b; }
+    
+    .spec-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; background: #fff; }
+    .spec-content-inner { padding: 25px; border-top: 1px solid #e2e8f0; }
+
+    .spec-item.active { border-color: var(--sidebar-active-blue); box-shadow: 0 4px 12px rgba(0,68,136,0.08); }
+    .spec-item.active .spec-trigger { background: #f0f7ff; color: var(--sidebar-active-blue); }
+    .spec-item.active .spec-trigger .icon { transform: rotate(180deg); color: var(--sidebar-active-blue); }
+    .spec-item.active .spec-content { max-height: 2000px; }
+
+    .notes-box { background: #fffaf0; border: 1px solid #fbd38d; border-left: 6px solid #dd6b20; padding: 25px; border-radius: 8px; margin-bottom: 10px; }
+    .notes-box h4 { color: #dd6b20; font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .notes-box ul { list-style-type: square; padding-left: 20px; }
+    .notes-box li { font-size: 0.98rem; color: #4a5568; margin-bottom: 8px; line-height: 1.6; }
+    .notes-box li strong { color: #1a202c; }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+    }
+
+    @media (max-width: 768px) {
+        .overview-table, .overview-table tbody, .overview-table tr, .overview-table td, .overview-table th { display: block; width: 100%; }
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="menu-container"></div>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>Academics</h2>
+            <ul class="sidebar-accordion">
+                <li class="accordion-item open" id="ugrd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('ugrd-item')">
+                        Undergraduate (UGRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-ugrd-program.html">Program</a></li>
+                        <li><a href="academics-ugrd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-ugrd-milestones.html" class="active">Milestones</a></li>
+                        <li><a href="academics-ugrd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+                <li class="accordion-item" id="grd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('grd-item')">
+                        Graduate (GRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-grd-program.html">Program</a></li>
+                        <li><a href="academics-grd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-grd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-grd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">ACADEMICS &gt; UGRD &gt; MILESTONES</div>
+
+            <div class="sub-page-header">
+                <h2>Undergraduate Milestones</h2>
+            </div>
+
+            <div class="content-container">
+    
+                <p style="color: #666; margin-bottom: 35px;">The following shows the general degree milestones for Technological Systems Management majors.</p>
+
+                <div class="section-title">✨ General Overview Roadmap</div>
+                
+                <table class="overview-table">
+                    <thead>
+                        <tr>
+                            <th>Fall Semester (1st, 3rd, 5th, 7th)</th>
+                            <th>Spring Semester (2nd, 4th, 6th, 8th)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="overview-year-title">Freshman - 1</div>
+                                <ul class="course-list">
+                                    <li>• 1 Major Core (EST 194 or EST 202)</li>
+                                    <li>• 1 SNW (Natural Science) Course</li>
+                                    <li>• MAT 123 (or Calculus I)</li>
+                                    <li>• 1 SBC Course</li>
+                                    <li>• WAE 194</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <div class="overview-year-title">Freshman - 2</div>
+                                <ul class="course-list">
+                                    <li>• 1 Major Core (EST 194 or EST 202)</li>
+                                    <li>• 1 Major Skills-Info Course</li>
+                                    <li>• AMS 151</li>
+                                    <li>• 1 SBC Course</li>
+                                    <li>• WRT 101</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="overview-year-title">Sophomore - 1</div>
+                                <ul class="course-list">
+                                    <li>• 1 Major Design Course</li>
+                                    <li>• 1 Specialization Track Course</li>
+                                    <li>• AMS 161</li>
+                                    <li>• 1 SBC Course</li>
+                                    <li>• 1 SBC Course</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <div class="overview-year-title">Sophomore - 2</div>
+                                <ul class="course-list">
+                                    <li>• 1 Major Elective Course</li>
+                                    <li>• 1 Specialization Track Course</li>
+                                    <li>• 1 Specialization Track Course</li>
+                                    <li>• 1 SNW (Natural Science) Course</li>
+                                    <li>• WRT 102</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="overview-year-title">Junior - 1</div>
+                                <ul class="course-list">
+                                    <li>• EST 304</li>
+                                    <li>• EST 331</li>
+                                    <li>• 1 Specialization Track Course</li>
+                                    <li>• 1 General Course</li>
+                                    <li>• 1 General Course</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <div class="overview-year-title" style="display: flex; align-items: center; gap: 8px;">
+                                    Junior - 2
+                                    <span style="display: inline-block; font-size: 11px; font-weight: bold; color: #800000; border: 1px solid #800000; padding: 2px 6px; border-radius: 4px; background-color: #ffffff; margin-left: 5px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <a href="academics-grd-program.html#bsms">
+                                        BSMS Eligible
+                                    </a>
+                                    </span>
+                                </div>
+                                <ul class="course-list">
+                                    <li>• EST 391</li>
+                                    <li>• EST 392</li>
+                                    <li>• EST 393</li>
+                                    <li>• 1 Specialization Track Course</li>
+                                    <li>• 1 General Course</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="overview-year-title">Senior - 1</div>
+                                <ul class="course-list">
+                                    <li>• EST 440</li>
+                                    <li>• 1 Major Elective Course</li>
+                                    <li>• 1 Specialization Track Course</li>
+                                    <li>• 1 General Course</li>
+                                    <li>• 1 General Course</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <div class="overview-year-title">Senior - 2</div>
+                                <ul class="course-list">
+                                    <li>• EST 441</li>
+                                    <li>• 1 Major Elective Course</li>
+                                    <li>• 1 Specialization Track Course</li>
+                                    <li>• 1 General Course</li>
+                                    <li>• 1 General Course</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="section-title">🎓 Specialization Milestones</div>
+                
+                <div class="spec-accordion">
+                    
+                    <div class="spec-item">
+                        <button class="spec-trigger" onclick="toggleSpec(this)">
+                            Information and Communication Technology (ICT) <span class="icon">▼</span>
+                        </button>
+                        <div class="spec-content">
+                            <div class="spec-content-inner">
+                                <table class="overview-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fall Semester</th>
+                                            <th>Spring Semester</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Freshman - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Core (EST 194 or EST 202)</li>
+                                                    <li>• 1 SNW</li>
+                                                    <li>• MAT 123</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• WAE 194</li>                                                    
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Freshman - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Core (EST 194 or EST 202)</li>
+                                                    <li>• 1 Major Skills-Info</li>
+                                                    <li>• AMS 151</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• WRT 101</li> 
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Sophomore - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Design</li>
+                                                    <li>• 1 Specialization (ISE 218)</li>
+                                                    <li>• AMS 161</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• 1 SBC Course</li> 
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Sophomore - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 Specialization (EST 230)</li>
+                                                    <li>• 1 Specialization (CSE 114)</li>
+                                                    <li>• 1 SNW</li>
+                                                    <li>• WRT 102</li> 
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Junior - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 304</li>
+                                                    <li>• EST 331</li>
+                                                    <li>• 1 Specialization (EST 310)</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li> 
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title" style="display: flex; align-items: center; gap: 8px;">
+                                                    Junior - 2
+                                                    <span style="display: inline-block; font-size: 11px; font-weight: bold; color: #800000; border: 1px solid #800000; padding: 2px 6px; border-radius: 4px; background-color: #ffffff; margin-left: 5px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                        BSMS Eligible
+                                                    </span>
+                                                </div>
+                                                <ul class="course-list">
+                                                    <li>• EST 391</li>
+                                                    <li>• EST 392</li>
+                                                    <li>• EST 393</li>
+                                                    <li>• 1 Specialization (EST 371 or EST 372)</li>
+                                                    <li>• 1 General Course</li> 
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Senior - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 440</li>
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 Specialization (EST 205)</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Senior - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 441</li>
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 Specialization (EST 320)</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li> 
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="notes-box">
+                                    <h4>⚠️ Important Notes for ICT Specialization</h4>
+                                    <ul>
+                                        <li>Generally, for ICT specialization following courses are required to complete with <strong>C or higher:</strong></li>
+                                            <ul class="course-list">
+                                                <li>• EST 205, EST 230, EST 310, EST 320, EST 371 or EST 372, ESE 123 or ISE 218, CSE 114</li>
+                                            </ul></li>
+                                        <li>EST 371 and EST 372 only offer at SUNY Korea</li>
+                                        <li>ISE courses are not offered at SUNY Korea (Can be taken via SBU online)</li>
+                                        <li>If the student wants to take ESE 123, they are required have a meeting with DTS coordinator. The student is required to submit a consent form for the course enrollment and approval from the course instructor to the department during the meeting. Since the course is conducted from outside of the department, the department cannot guarantee its seats regardless it is required.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <button class="spec-trigger" onclick="toggleSpec(this)">
+                            Computer Science (CS) <span class="icon">▼</span>
+                        </button>
+                        <div class="spec-content">
+                            <div class="spec-content-inner">
+                                <table class="overview-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fall Semester</th>
+                                            <th>Spring Semester</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Freshman - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Core (EST 194 or EST 202)</li>
+                                                    <li>• 1 SNW</li>
+                                                    <li>• MAT 123</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• WAE 194</li> 
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Freshman - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Core (EST 194 or EST 202)</li>
+                                                    <li>• 1 Major Skills-Info</li>
+                                                    <li>• AMS 151</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• WRT 101</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Sophomore - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• Specialization (CSE 114)</li>
+                                                    <li>• Specialization (CSE 101)</li>
+                                                    <li>• AMS 161</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• 1 SBC Course</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Sophomore - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 Specialization (ISE 305)</li>
+                                                    <li>• 1 Specialization (ISE 218)</li>
+                                                    <li>• 1 SNW</li>
+                                                    <li>• WRT 102</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Junior - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 304</li>
+                                                    <li>• EST 331</li>
+                                                    <li>• 1 Specialization (CSE 214)</li>
+                                                    <li>• 1 Major Design</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title" style="display: flex; align-items: center; gap: 8px;">
+                                                    Junior - 2
+                                                    <span style="display: inline-block; font-size: 11px; font-weight: bold; color: #800000; border: 1px solid #800000; padding: 2px 6px; border-radius: 4px; background-color: #ffffff; margin-left: 5px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                        BSMS Eligible
+                                                    </span>
+                                                </div>
+                                                <ul class="course-list">
+                                                    <li>• EST 391</li>
+                                                    <li>• EST 392</li>
+                                                    <li>• EST 393</li>
+                                                    <li>• 1 Specialization (CSE 310)</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Senior - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 440</li>
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 Specialization (CSE 337)</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Senior - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 441</li>
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="notes-box">
+                                    <h4>⚠️ Important Notes for CS Specialization</h4>
+                                    <ul>
+                                        <li>Generally, for CS specialization following courses are required to complete with <strong>C or higher:</strong></li>
+                                            <ul class="course-list">
+                                                <li>• CSE 101, CSE 114, CSE 214, ISE 218, CSE 310 or ISE 316, CSE 337 or ISE 337, ISE 305</li>
+                                            </ul></li>
+                                        <li>To take upper level in CSE courses, the student need to declare CS minor</li>
+                                        <li>ISE courses are not offered at SUNY Korea but in SBU or SBU online.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="spec-item">
+                        <button class="spec-trigger" onclick="toggleSpec(this)">
+                            Applied Mathematics Statistics (AMS) <span class="icon">▼</span>
+                        </button>
+                        <div class="spec-content">
+                            <div class="spec-content-inner">
+                                <table class="overview-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fall Semester</th>
+                                            <th>Spring Semester</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Freshman - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Core (EST 194 or EST 202)</li>
+                                                    <li>• 1 SNW</li>
+                                                    <li>• MAT 123</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• WAE 194</li> 
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Freshman - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Core (EST 194 or EST 202)</li>
+                                                    <li>• 1 Major Skills-Info</li>
+                                                    <li>• AMS 151</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• WRT 101</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Sophomore - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Design</li>
+                                                    <li>• AMS 161</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• 1 SBC Course</li>
+                                                    <li>• WRT 102</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Sophomore - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 Specialization (AMS 210)</li>
+                                                    <li>• 1 Specialization (AMS 261)</li>
+                                                    <li>• 1 Specialization (AMS 301)</li>
+                                                    <li>• 1 SNW</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Junior - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 304</li>
+                                                    <li>• EST 331</li>
+                                                    <li>• 1 Specialization (AMS 310)</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title" style="display: flex; align-items: center; gap: 8px;">
+                                                    Junior - 2
+                                                    <span style="display: inline-block; font-size: 11px; font-weight: bold; color: #800000; border: 1px solid #800000; padding: 2px 6px; border-radius: 4px; background-color: #ffffff; margin-left: 5px; vertical-align: middle; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                        BSMS Eligible
+                                                    </span>
+                                                </div>
+                                                <ul class="course-list">
+                                                    <li>• EST 391</li>
+                                                    <li>• EST 392</li>
+                                                    <li>• EST 393</li>
+                                                    <li>• 1 Specialization (AMS 315)</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="overview-year-title">Senior - 1</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 440</li>
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 Specialization (AMS: Upper)</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                            <td>
+                                                <div class="overview-year-title">Senior - 2</div>
+                                                <ul class="course-list">
+                                                    <li>• EST 441</li>
+                                                    <li>• 1 Major Elective</li>
+                                                    <li>• 1 Specialization (AMS: Upper)</li>
+                                                    <li>• 1 General Course</li>
+                                                    <li>• 1 General Course</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="notes-box">
+                                    <h4>⚠️ Important Notes for AMS Specialization</h4>
+                                    <ul>
+                                        <li>Generally, for AMS specialization following courses are required to complete with <strong>C or higher:</strong></li>
+                                            <ul class="course-list">
+                                                <li>• AMS 210, AMS 261, AMS 301, AMS 310, AMS 315, AMS: Upper Level, AMS: Upper Level</li>
+                                            </ul></li>
+                                        <li>For students seeking a deeper understanding of AMS, pursuing a double major is advised rather than a minor.</li>
+                                        <li>At SUNY Korea, AMS 315 appears to be offered only in the spring semester. This needs to be confirmed with the AMS department.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="notes-box">
+                    <h4>⚠️ Important Academic Advising Notes</h4>
+                    <ul>
+                        <li><strong>Major Declaration:</strong> Students are highly recommended to officially declare their specialization before the start of their sophomore year.</li>
+                        <li><strong>Prerequisite Policy:</strong> Students should strictly follow all prerequisites. Please verify all course prerequisites in the official catalog before registration. Taking courses out of order may delay graduation.</li>
+                        <li><strong>Grade Requirements:</strong> All core major courses and specialization-required tracks must be completed with a grade of <strong>C or higher</strong> to satisfy graduation benchmarks.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script src="menu.js"></script>
+    <script>
+        function toggleSidebarMenu(itemId) {
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(item => {
+                if (item.id === itemId) {
+                    item.classList.toggle('open');
+                } else {
+                    item.classList.remove('open');
+                }
+            });
+        }
+
+        function toggleSpec(button) {
+            const currentItem = button.closest('.spec-item');
+            if (!currentItem) return;
+            currentItem.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

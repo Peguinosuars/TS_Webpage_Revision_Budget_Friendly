@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Message from the Chair - SUNY Korea</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; }
+    .logo-image-placeholder { height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px; }
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .nav-drawer { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #ffffff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.4s ease; z-index: 2000; padding: 80px 30px 40px 30px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1999; }
+    .drawer-overlay.show { display: block; }
+    .menu-category { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .menu-category > h3 { font-size: 1.15rem; color: var(--suny-navy); padding: 10px 5px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .drawer-sub-menu { list-style: none; padding-left: 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .menu-category.active .drawer-sub-menu { max-height: 800px; margin-top: 5px; margin-bottom: 10px; }
+    .menu-category li { margin-bottom: 12px; }
+    .menu-category a { font-size: 0.95rem; color: #555; font-weight: 600; display: block; }
+
+    .sub-banner { 
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 240px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    .left-sidebar ul { list-style: none; }
+    .left-sidebar li a { display: block; padding: 13px 18px; color: #444; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; font-weight: 500; transition: all 0.2s ease; }
+    .left-sidebar li a:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .left-sidebar li a.active { background-color: var(--sidebar-active-blue); color: white !important; font-weight: bold; }
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+    
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-navy); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.2rem; color: var(--suny-navy); }
+    .sub-page-header p { color: var(--suny-red); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; margin-top: 5px; }
+    
+    .chair-container { background: white; padding: 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .chair-headline { display: flex; gap: 40px; align-items: center; margin-bottom: 30px; padding-bottom: 25px; border-bottom: 1px dashed #e2e8f0; }
+    .chair-photo { flex-shrink: 0; width: 160px; text-align: center; }
+    .chair-photo div { width: 160px; height: 200px; background: #e2e8f0; border-radius: 6px; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.75rem; font-weight: 600; margin-bottom: 8px; }
+    .chair-photo h4 { font-size: 1.05rem; color: var(--suny-navy); font-weight: bold; margin-bottom: 2px; }
+    .chair-photo p { font-size: 0.8rem; color: var(--suny-red); font-weight: 600; text-transform: uppercase; }
+    .welcome-heading { font-size: 1.55rem; color: var(--suny-navy); font-weight: 700; line-height: 1.5; text-align: left; }
+    .message-p { font-size: 1.05rem; color: #4a5568; margin-bottom: 22px; text-align: justify; letter-spacing: -0.2px; }
+    .quote-block { background: #f8fafc; border-left: 4px solid var(--suny-red); padding: 20px; font-style: italic; margin: 25px 0; color: #334155; font-size: 1.02rem; line-height: 1.6; }
+    
+    footer { background: #1a1a1a; color: #ccc; text-align: center; padding: 40px 20px; margin-top: 100px; }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+    }
+    @media (max-width: 768px) {
+        .chair-headline-block { flex-direction: column; align-items: center; gap: 25px; text-align: center; }
+        .welcome-heading { text-align: center; }
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-container">
+            <div class="logo-image-placeholder">LOGO IMAGE PLACEHOLDER</div>
+        </a>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="menu-container"></div>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>About Us</h2>
+            <ul>
+                <li><a href="about-what.html">What is TS</a></li>
+                <li><a href="about-why.html">Why TS</a></li>
+                <li><a href="about-chair.html" class="active">Message from the Chair</a></li>
+                <li><a href="about-mission.html">Mission & History & Vision</a></li>
+                <li><a href="about-contact.html">Contact US</a></li>
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">ABOUT &gt; Message from the Chair</div>
+
+            <div class="sub-page-header">
+                <h2>Message from the Department Chair</h2>
+                <p>About / Chair's Welcome</p>
+            </div>
+
+            <div class="chair-container">
+                <div class="chair-headline">
+                    <div class="chair-photo">
+                        <div>PHOTO PLACEHOLDER</div>
+                        <h4>Department Chair</h4>
+                        <p>Technology & Society</p>
+                    </div>
+                    <h3 class="welcome-heading">
+                        Welcome to all students and stakeholders interested in our Technology and Society and interested in the challenge of understanding and enabling technology in and for society.
+                    </h3>
+                </div>
+
+                <div>
+                    <p class="message-p">
+                        Quoting philosopher of science Thomas Kuhn, he asked <strong>“does a field make progress because it is a science, or is it a science because it makes progress?”</strong> Similarly, as Chair of this department, my question to you is <strong>“does our society make progress simply because of technological change, or does technology really only make progress when a society progresses?"</strong> Just as a scientific truth cannot be established solely by objective criteria but is defined by a social consensus of a scientific community, technologies cannot be established or improved solely by objective criteria but are improved by the consensus of a society. Thus, our mission is to train our graduates to reflect upon and to help communicate how to improve and to manage technology for these wider interests of the consensus of a society.
+                    </p>
+
+                    <p class="message-p">
+                        TS is a unique place where our students learn how to improve the future of technology and society. To help me explain our department which designs this better future, I quote the IEEE’s Society on Social Implications of Technology (SSIT) and its Transactions on Technology and Society.
+                    </p>
+
+                    <div class="quote-block">
+                        TS shares the same goals as the field of the Social Implications of Technology which is <strong>“the impact of technology on society, including both positive and negative effects, the impact of society on the engineering profession, the history of the societal aspects of technology, and professional social and economic responsibility in the practice of engineering and its related technology."</strong> Plus, the Social Implications of Technology deal with environmental impacts, societal impacts, as well as human impacts. Our department parallels the ESG (Environmental, Social and Governance) concepts.
+                    </div>
+
+                    <p class="message-p">
+                        Plus, all academic departments have outside relationships with wider stakeholders that help students find a job in the future. TS’s wider institutional collaborators are target industries, professional engineering societies, and related academic journals that help our students via internships, jobs, and training programs. 
+                    </p>
+
+                    <p class="message-p">
+                        TS’s representative technologies include, but are not limited to, <strong>Information Communication Technology (ICT), Artificial Intelligence (AI), and Robotics</strong>. Students learn about emerging social issues of these and other technologies and learn how to deal with issues of Ethics, Privacy, Security, Health, and Medicine. Our stakeholders want graduates who connect to their target industries and markets, while helping them manage their technologies for the wider society.
+                    </p>
+
+                    <p class="message-p" style="font-weight: bold; margin-top: 40px; color: var(--suny-navy); font-size: 1.2rem;">
+                        In conclusion, let us be TS people who draw the consensus of a society!
+                    </p>
+                    <p class="message-p" style="margin-top: 20px; color: #4a5568; font-size: 1.05rem;">
+                        Sincerely,<br>
+                        <strong style="color: var(--suny-navy); font-size: 1.1rem;">Department Chair</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script src="menu.js"></script>
+
+    <script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer && overlay) {
+                drawer.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+        }
+        function toggleAccordion(element) {
+            if (element && element.parentElement) {
+                element.parentElement.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+</html>

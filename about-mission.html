@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission & History & Vision - Technology and Society</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .nav-drawer { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #ffffff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.4s ease; z-index: 2000; padding: 80px 30px 40px 30px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1999; }
+    .drawer-overlay.show { display: block; }
+    
+    .menu-category { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .menu-category > h3 { font-size: 1.15rem; color: var(--suny-navy); padding: 10px 5px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .drawer-sub-menu { list-style: none; padding-left: 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .menu-category.active .drawer-sub-menu { max-height: 800px; margin-top: 5px; margin-bottom: 10px; }
+    .menu-category li { margin-bottom: 12px; }
+    .menu-category a { font-size: 0.95rem; color: #555; font-weight: 600; display: block; }
+    
+    .sub-depth-group { margin-top: 10px; padding-left: 5px; }
+    .sub-depth-title { font-size: 0.9rem; color: var(--suny-navy); font-weight: bold; display: block; margin-bottom: 5px; }
+    .sub-depth-links { padding-left: 15px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .sub-depth-links a { font-weight: 500; color: #666; font-size: 0.88rem; }
+
+    .sub-banner { 
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 240px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    .left-sidebar ul { list-style: none; }
+    .left-sidebar li a { display: block; padding: 13px 18px; color: #444; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; font-weight: 500; transition: all 0.2s ease; }
+    .left-sidebar li a:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .left-sidebar li a.active { background-color: var(--sidebar-active-blue); color: white !important; font-weight: bold; }
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-red); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.5rem; color: var(--suny-navy); text-transform: uppercase; }
+    .sub-page-header p { color: var(--suny-red); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; margin-top: 5px; }
+    
+    .section-block { margin-bottom: 60px; }
+    .section-subtitle { font-size: 1.8rem; color: var(--suny-navy); margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+    .mission-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .mission-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--suny-red); }
+    .mission-card h4 { color: var(--suny-navy); margin-bottom: 10px; font-size: 1.1rem; }
+    .mission-card p { color: #666; font-size: 0.92rem; }
+    .highlight-box { background: var(--suny-navy); color: white; padding: 30px; border-radius: 8px; margin-bottom: 40px; }
+    .highlight-box h4 { color: #fff; margin-bottom: 10px; font-size: 1.25rem; }
+    .highlight-box p { color: #e0e0e0; font-size: 0.98rem; }
+    .timeline { position: relative; border-left: 3px solid #ddd; padding-left: 30px; margin-left: 20px; }
+    .timeline-item { position: relative; margin-bottom: 40px; }
+    .timeline-item::before { content: ''; position: absolute; left: -36px; top: 5px; width: 10px; height: 10px; background: var(--suny-red); border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 3px var(--suny-red); }
+    .timeline-year { font-size: 1.4rem; font-weight: bold; color: var(--suny-red); margin-bottom: 10px; display: block; }
+    .timeline-content { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
+    .timeline-sub-item { margin-bottom: 15px; }
+    .timeline-sub-item:last-child { margin-bottom: 0; }
+    .timeline-month { display: inline-block; background: var(--suny-navy); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; }
+    .timeline-sub-item h5 { font-size: 1rem; color: #333; margin-bottom: 5px; }
+    .timeline-sub-item p { font-size: 0.9rem; color: #666; }
+
+    footer { background: #1a1a1a; color: #ccc; text-align: center; padding: 30px 20px; margin-top: 100px; font-size: 0.9rem; }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="menu-container"></div>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>About Us</h2>
+            <ul>
+                <li><a href="about-what.html">What is TS</a></li>
+                <li><a href="about-why.html">Why TS</a></li>
+                <li><a href="about-chair.html">Message from the Chair</a></li>
+                <li><a href="about-mission.html" class="active">Mission & History & Vision</a></li>
+                <li><a href="about-contact.html">Contact US</a></li>
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">
+                ABOUT &gt; Mission & History & Vision
+            </div>
+
+            <div class="sub-page-header">
+                <h2>Mission & History & Vision</h2>
+                <p>About / Mission & History & Vision</p>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🎯 Our Vision & Global Identity</h4>
+                <p>The Technology and Society (TS) at SUNY Korea is an extension of the same department at Stony Brook University in New York, sharing the same mission, curriculum, and degrees. Our ultimate mission is to train you to make creative and innovative solutions for future society through global, interdisciplinary, and trans-disciplinary knowledge.</p>
+            </div>
+
+            <section class="section-block">
+                <h2 class="section-subtitle">📌 Our Core Mission Aims</h2>
+                <div class="mission-grid" id="missionGrid"></div>
+                <div class="mission-card" style="border-top-color: var(--suny-navy);">
+                    <h4>🌐 Why Our Global Environment Strategy Matters</h4>
+                    <p style="margin-bottom: 8px;">• <strong>Cultural Diversity:</strong> An international basis of students with over 30 nationalities attending our campus (as of 2020), offering an environment vastly unique from other universities in Korea.</p>
+                    <p style="margin-bottom: 8px;">• <strong>SBU Prestige & Uniqueness:</strong> Benefit from a unique professional network and a degree from Stony Brook University. TS at SUNY Korea is the only such department in Korea and one of the few worldwide.</p>
+                    <p>• <strong>Songdo Green Smart City:</strong> Direct links to unique communities and work opportunities in South Korea's premier tech hub, Songdo, paired with global scholarship support.</p>
+                </div>
+            </section>
+
+            <section class="section-block">
+                <h2 class="section-subtitle">⏳ History of TS at SUNY Korea</h2>
+                <p style="color: #666; margin-bottom: 30px;">The Department of Technology and Society is the oldest and largest of departments introduced to SUNY Korea by Stony Brook University.</p>
+                <div class="timeline" id="timeline"></div>
+            </section>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script src="menu.js"></script>
+
+    <script>
+        const missions = [
+            ['01. 21st Century Education', 'Providing a digital and holistic “big picture” education coupled with specific technical learning (ICT, AMS, CS) for practical knowledge.'],
+            ['02. Global Economy Readiness', 'Equipping students with knowledge that dynamically keeps up with a constantly changing global economy.'],
+            ['03. Career Practicality', 'Focusing on actual industry readiness through tailored opportunities such as high-value internships and job placements.'],
+            ['04. Critical Leadership Roles', 'Nurturing critical working and thinking abilities aligned with "4.0" economy needs (targeting paths toward CTO, CDO, CIO positions).'],
+            ['05. Creative Decision Making', 'Developing strategic skills to become innovative decision-makers in business, policy, or advanced technical fields.'],
+            ['06. Social Consciousness & Ethics', 'Developing globalized citizen engagement to solve socio-technical problems for social good, while staying highly aware of ethical issues.']
+        ];
+        const history = [
+            {year:'2019', items:[['09','Fresh Undergraduate Specialization in ICT4SD','The new ICT4SD undergraduate specialization is implemented. Students can choose from three paths: AMS, CSE, and ICT4SD.'],['08','First Interchange of Faculty Between SBU & SUNY Korea','Gerry Stokes becomes the Chair of TS at SUNY Korea, launching long-term faculty interchange from Stony Brook University.']]},
+            {year:'2018', items:[['01','Fresh Graduate Courses in Disaster Risk Reduction (DRR)','Under Chair James Larson, a new focus in DRR was added to the M.S. degree, creating two solid tracks: Global Technology Management and DRR.']]},
+            {year:'2017', items:[['12.01','First Graduation of Undergraduate Students','Graduation of the first undergraduate class with a B.S. in Technological Systems Management, addressed by SBU President Stanley.']]},
+            {year:'2016', items:[['03.01','Undergraduate Curriculum Innovation','Under Chair James Larson, three new big data and mobile infrastructure courses were added to launch the ICT4SD undergrad focus.']]},
+            {year:'2013', items:[['06.29','First Graduation of Master\'s Students','The historic first graduation ceremony for students completing their M.S. degrees occurred.'],['03.04','First Day of Undergraduate Classes','First Day of Classes for the Charter Cohort (B.S. degree). 26 elite students enrolled from South Korea, the US, and Chile.']]},
+            {year:'2012', items:[['08.03','MEST Authorization','Operation of the undergraduate program officially approved by the Ministry of Education, Science and Technology (MEST).'],['03.02','First Day of Graduate Classes at SUNY Korea','First Day of Classes for the graduate program (M.S.). Addressed by Former Chair Prof. Fred Phillips and First President Kim Choonho.']]},
+            {year:'2009', items:[['05.12','SUNY Korea Campus Authorized','The SUNY Board of Trustees approved the development and implementation of the overseas educational program in the Incheon Free Economic Zone (IFEZ).']]}
+        ];
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer && overlay) {
+                drawer.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+        }
+        function toggleAccordion(element) {
+            if (element && element.parentElement) {
+                element.parentElement.classList.toggle('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('missionGrid').innerHTML = missions.map(([title, text]) => `<div class="mission-card"><h4>${title}</h4><p>${text}</p></div>`).join('');
+            document.getElementById('timeline').innerHTML = history.map(({year, items}) => `
+                <div class="timeline-item">
+                    <span class="timeline-year">${year}</span>
+                    <div class="timeline-content">
+                        ${items.map(([month, title, text]) => `<div class="timeline-sub-item"><span class="timeline-month">${month}</span><h5>${title}</h5><p>${text}</p></div>`).join('')}
+                    </div>
+                </div>`).join('');
+        });
+    </script>
+</body>
+</html>

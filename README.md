@@ -1,1 +1,2 @@
-# TS_Webpage_Revision_Budget_Friendly
+# TS-Website-Revision
+SUNY Korea DTS Website Revision

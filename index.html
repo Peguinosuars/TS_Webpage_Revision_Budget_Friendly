@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technology and Society - SUNY Korea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+            color: #333;
+            background-color: #fff;
+            line-height: 1.5;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* --- Header --- */
+        header {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-placeholder {
+            font-weight: 700;
+            font-size: 14px;
+            color: #005A9C;
+            line-height: 1.2;
+        }
+        .logo-placeholder span {
+            color: #C8102E;
+        }
+        .logo-placeholder .dept-title {
+            color: #333;
+            display: block;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        nav ul li a {
+            font-size: 15px;
+            font-weight: 500;
+            color: #222;
+            transition: color 0.2s;
+        }
+        nav ul li a:hover {
+            color: #C8102E;
+        }
+        .header-icons {
+            display: flex;
+            gap: 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .hero {
+            width: 100%;
+            height: 480px;
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+        }
+        .hero-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            color: #fff;
+        }
+        .hero h1 {
+            font-size: 44px;
+            font-weight: 700;
+            color: #F4C430;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+        }
+        .hero p {
+            font-size: 38px;
+            font-weight: 600;
+            line-height: 1.2;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .btn-circle {
+            width: 45px;
+            height: 45px;
+            background-color: #0088cc;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.3fr;
+            gap: 50px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        .section-title .plus {
+            font-weight: 300;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid #333;
+        }
+        .pagination .current { font-weight: 700; }
+        .pagination .total { color: #999; }
+        .pagination i { cursor: pointer; color: #666; }
+
+        .announcement-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+        .announcement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .announcement-item {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+        .announcement-tag {
+            color: #C8102E;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .announcement-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 2px;
+            color: #444;
+        }
+
+        .spotlight-box {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background-color: #ddd;
+            overflow: hidden;
+        }
+        .spotlight-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .spotlight-caption {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .schedule-box {
+            margin-top: 40px;
+        }
+        .schedule-box img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        /* Column 3: News */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .news-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .news-item:first-child { padding-top: 0; }
+        .news-item:last-child { border-bottom: 2px solid #333; }
+        
+        .news-text {
+            flex: 1;
+        }
+        .news-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+        .news-desc {
+            font-size: 12px;
+            color: #777;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .news-date {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+            min-width: 54px;
+            line-height: 1.1;
+        }
+        .news-date .day {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            display: block;
+        }
+        .news-date .year-month {
+            font-size: 10px;
+            color: #888;
+            margin-top: 3px;
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <div class="logo-placeholder">
+                SUNY Korea | <span>Stony Brook University</span>
+                <span class="dept-title">Technology and Society</span>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">People</a></li>
+                <li><a href="#">Research</a></li>
+                <li><a href="#">Programs</a></li>
+                <li><a href="#">Courses</a></li>
+            </ul>
+        </nav>
+        <div class="header-icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-bars"></i>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Technology and Society</h1>
+            <p>
+                History Makers.<br>
+                We Change the World!
+                <span class="btn-circle"><i class="fa-solid fa-arrow-right"></i></span>
+            </p>
+        </div>
+    </section>
+
+    <main>
+        <section>
+            <div class="section-title">
+                <span>Announcement</span>
+                <span class="plus">+</span>
+            </div>
+                <div class="announcement-main">
+                    <img class="announcement-img" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600" alt="Course Image">
+                    <div class="announcement-tag">Enrollment</div>
+                    <div class="announcement-name">EST 488 Enrollment</div>
+                </div>
+                <div class="announcement-item">
+                    <div class="announcement-tag">Enrollment</div>
+                    <div class="announcement-name">EST 499 Enrollment Procedure</div>
+                </div>
+                <div class="announcement-item">
+                    <div class="announcement-tag">Enrollment</div>
+                    <div class="announcement-name">ESE 123 Enrollment Regulation</div>
+                </div>
+            </div>
+            <div class="pagination">
+                <i class="fa-solid fa-chevron-left"></i>
+                <span class="current">01</span> <span class="total">/ 10</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        </section>
+
+        <section>
+            <div>
+                <div class="section-title">
+                    <span>Undergraduate</span>
+                    <span class="plus">+</span>
+                </div>
+                <div class="spotlight-box">
+                    <img src="https://images.unsplash.com/photo-1677594334053-afe4b41aa0a3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Faculty">
+                    <div class="spotlight-caption">Undergraduate Academic Program</div>
+                </div>
+            </div>
+
+                <div class="section-title">
+                    <span>Graduate</span>
+                    <span class="plus">+</span>
+                </div>
+                <div class="spotlight-box">
+                    <img src="https://images.unsplash.com/photo-1506377872008-6645d9d29ef7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Faculty">
+                    <div class="spotlight-caption">Graduate Academic Program</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-title">
+                <span>News</span>
+                <span class="plus">+</span>
+            </div>
+            <div class="news-list">
+                <div class="news-item">
+                    <div class="news-text">
+                        <div class="news-title">[Faculty Insight] Prof. Cabuay Addresses AI Governance and Ethics at Internation...</div>
+                        <div class="news-desc">Prof. Cabuay recently delivered the 2nd keynote speech at the 2026 International Conference of...</div>
+                    </div>
+                    <div class="news-date">
+                        <span class="day">22</span>
+                        <span class="year-month">2026.06</span>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-text">
+                        <div class="news-title">[Event] 2026 International Conference: "WEAVING THE FUTURE" (Featuring Prof...</div>
+                        <div class="news-desc">Dear DTS Students and Faculty, We are pleased to announce that Prof. Cabuay will be a keynote...</div>
+                    </div>
+                    <div class="news-date">
+                        <span class="day">18</span>
+                        <span class="year-month">2026.06</span>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-text">
+                        <div class="news-title">New Publication Release: ICT4D & Future Global Sustainability</div>
+                        <div class="news-desc">We are pleased to announce the official release and distribution of ICT4D & Future Global...</div>
+                    </div>
+                    <div class="news-date">
+                        <span class="day">18</span>
+                        <span class="year-month">2026.06</span>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-text">
+                        <div class="news-title">DTS Students Take Grand Prize at Hackathon "The X 2026" with Innovativ...</div>
+                        <div class="news-desc">We are absolutely thrilled to share some wonderful news and a deeply proud moment for...</div>
+                    </div>
+                    <div class="news-date">
+                        <span class="day">10</span>
+                        <span class="year-month">2026.06</span>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-text">
+                        <div class="news-title">Dongchan Kim Won Final Grand Prize at MIT Reality Hack</div>
+                        <div class="news-desc">The Department of Technology and Society's BS student, Dongchan Kim, has achieved a...</div>
+                    </div>
+                    <div class="news-date">
+                        <span class="day">04</span>
+                        <span class="year-month">2026.02</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

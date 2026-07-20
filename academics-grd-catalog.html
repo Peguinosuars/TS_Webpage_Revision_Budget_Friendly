@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Catalogs - Technology and Society</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .sub-banner { 
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    
+    .sidebar-accordion { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+    .accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background-color: #fff; color: var(--suny-navy); font-weight: bold; font-size: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .accordion-header:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .accordion-header span { font-size: 0.8rem; transition: transform 0.3s; }
+
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; list-style: none; padding-left: 10px; }
+    .accordion-content li a { display: block; padding: 10px 15px; color: #555; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid #edf2f7; transition: all 0.2s; }
+    .accordion-content li a:hover { color: var(--suny-red); padding-left: 20px; }
+    
+    .accordion-content li a.active { color: var(--sidebar-active-blue); font-weight: bold; }
+    .accordion-content li a.active::before { content: "• "; color: var(--sidebar-active-blue); }
+
+    .accordion-item.open .accordion-header { background-color: #edf2f7; color: var(--suny-navy); }
+    .accordion-item.open .accordion-header span { transform: rotate(180deg); }
+    .accordion-item.open .accordion-content { max-height: 200px; }
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-red); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.2rem; color: var(--suny-navy); font-weight: 700; }
+    
+    .content-container { background: white; padding: 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    
+    .catalog-tabs { display: flex; gap: 10px; margin-bottom: 35px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+    .catalog-tab-btn { padding: 10px 22px; font-weight: bold; font-size: 1rem; border: 1px solid #e2e8f0; background: white; border-radius: 6px; cursor: pointer; color: var(--suny-navy); transition: all 0.2s; }
+    .catalog-tab-btn:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .catalog-tab-btn.active { background-color: var(--sidebar-active-blue); color: white; border-color: var(--sidebar-active-blue); }
+
+    .catalog-shell { display: grid; gap: 24px; }
+    .catalog-section h3 { font-size: 1.4rem; color: var(--suny-navy); font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .catalog-section p { font-size: 1rem; color: #555; line-height: 1.6; margin-bottom: 12px; }
+    
+    .catalog-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .catalog-card-info { flex: 1; min-width: 250px; }
+    .catalog-card-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    
+    .catalog-card h4 { color: var(--suny-navy); font-size: 1.2rem; margin: 6px 0 4px; font-weight: 700; }
+    .catalog-card p { margin: 0; color: #666; font-size: 0.9rem; }
+    .pill { display: inline-block; background: var(--suny-red); color: white; padding: 3px 8px; font-size: 0.75rem; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
+    
+    .btn { background: var(--sidebar-active-blue); color: white; padding: 12px 22px; border-radius: 6px; font-weight: bold; font-size: 0.9rem; display: inline-block; white-space: nowrap; text-align: center; }
+    .btn:hover { background: #002244; }
+    
+    .alert { background: #fff5f5; border: 1px solid #fca5a5; border-left: 4px solid var(--suny-red); border-radius: 8px; padding: 22px; }
+    .alert h4 { color: var(--suny-red); font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .alert ul { list-style: none; display: grid; gap: 10px; margin-top: 10px; }
+    .alert li { font-size: 0.95rem; color: #444; line-height: 1.6; }
+    .divider { height: 1px; background: #e2e8f0; margin: 16px 0; }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>Academics</h2>
+            <ul class="sidebar-accordion">
+                <li class="accordion-item" id="ugrd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('ugrd-item')">
+                        Undergraduate (UGRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-ugrd-program.html">Program</a></li>
+                        <li><a href="academics-ugrd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-ugrd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-ugrd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+
+                <li class="accordion-item open" id="grd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('grd-item')">
+                        Graduate (GRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-grd-program.html">Program</a></li>
+                        <li><a href="academics-grd-catalog.html" class="active">Catalog</a></li>
+                        <li><a href="academics-grd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-grd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">ACADEMICS &gt; GRD &gt; CATALOG</div>
+
+            <div class="sub-page-header">
+                <h2>Graduate Catalogs (Required Term)</h2>
+            </div>
+
+            <div class="content-container">
+                
+                <div class="catalog-tabs">
+                    <button class="catalog-tab-btn active" onclick="switchCatalogTab(event, 'bsms')">Accelerated BSMS</button>
+                    <button class="catalog-tab-btn" onclick="switchCatalogTab(event, 'ms')">MS Program</button>
+                    <button class="catalog-tab-btn" onclick="switchCatalogTab(event, 'phd')">PhD Program</button>
+                </div>
+
+                <div id="catalogContent" class="catalog-shell"></div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script>
+        let currentTab = 'bsms';
+
+        const catalogData = [
+            {
+                program: 'bsms',
+                title: 'Academic Regulations',
+                type: 'alert',
+                heading: '⚠️ Leave of Absence & Graduation Requirements',
+                intro: 'Taking a Leave of Absence after your BS graduation will fail you from continuing your BSMS program.',
+                bullet: 'If you are required to take a gap year before starting your MS program, you must need to contact SUNY Korea TS Department and graduate coordinator at SBU TS Department.'
+            },
+            {
+                program: 'bsms',
+                title: 'Official Academic Catalog',
+                type: 'card',
+                intro: 'Please download and review the official BS/MS combined program handbook corresponding to your entry semester.',
+                badge: 'Current',
+                heading: 'Fall 2026 BS & MS Catalog',
+                meta: 'Effective for all students entering in the Fall 2025 semester.',
+                link: 'https://catalog.stonybrook.edu/preview_program.php?catoid=11&poid=1506&returnto=1134',
+                link2: 'https://catalog.stonybrook.edu/preview_program.php?catoid=12&poid=1763&returnto=1356'
+            },
+            {
+                program: 'bsms',
+                title: 'Past Catalogs (Archive)',
+                type: 'card',
+                intro: 'If you are under a previous graduation requirement, please find your respective catalog below:',
+                badge: 'Archive',
+                heading: 'Past BS and MS Catalog',
+                meta: 'Effective for all students entered before Fall 2025.',
+                link: 'https://www.stonybrook.edu/bulletin-archives/all/undergraduate.html',
+                link2: 'https://www.stonybrook.edu/bulletin-archives/all/graduate.html'
+            },
+            {
+                program: 'ms',
+                title: 'Academic Regulations',
+                type: 'alert',
+                heading: '⚠️ MS Degree Credit & 4-Semester Timeline Regulations',
+                intro: 'MS students must complete their required curriculum and balance core credits within 4 semesters to secure timely graduation approval.',
+                bullet: '4-Semester Timeline: In some cases, students might be eligible to complete their program less than 4 semesters, depends on their catalog year and offered courses.'
+            },
+            {
+                program: 'ms',
+                title: 'Official Academic Catalog',
+                type: 'card',
+                intro: 'Please review the core requirements and specialized tracks for the Master of Science program.',
+                badge: 'Current',
+                heading: 'Fall 2026 Master of Science (MS) Catalog',
+                meta: 'Official Bulletin for TSM Master\'s Program students.',
+                link: 'https://catalog.stonybrook.edu/preview_program.php?catoid=12&poid=1763&returnto=1356'
+            },
+            {
+                program: 'ms',
+                title: 'Past Catalogs (Archive)',
+                type: 'card',
+                intro: 'If you are under a previous graduation requirement, please find your respective catalog below:',
+                badge: 'Archive',
+                heading: 'Past MS Catalog',
+                meta: 'Effective for all students entered before Fall 2026.',
+                link: 'https://www.stonybrook.edu/bulletin-archives/all/graduate.html'
+            },
+            {
+                program: 'phd',
+                title: 'Academic Regulations',
+                type: 'alert',
+                heading: '⚠️ PhD Milestone & Preliminary Examination Deadlines',
+                intro: 'Ph.D. candidates in Technology, Policy, and Innovation (TPI) <strong>are required to visit SBU</strong> to fulfill their required courses (SOC/POL 501 and SOC/POL 502) as well as residency requirements based on Fall 2026 catalog.',
+                bullet: '📝 Advancement to Candidacy: Granted only after successfully passing all requirements and submitting all necessary documentation.'
+            },
+            {
+                program: 'phd',
+                title: 'Official Academic Catalog',
+                type: 'card',
+                intro: 'Please download the complete doctoral guide detailing dissertation standards and research tracks.',
+                badge: 'Current',
+                heading: 'Fall 2026 Ph.D. in TPI Graduate Catalog',
+                meta: 'Effective for all Ph.D. students matriculating in Fall 2025.',
+                link: 'https://catalog.stonybrook.edu/preview_program.php?catoid=12&poid=1764&returnto=1358'
+            },
+            {
+                program: 'phd',
+                title: 'Past Catalogs (Archive)',
+                type: 'card',
+                intro: 'If you are under a previous graduation requirement, please find your respective catalog below:',
+                badge: 'Archive',
+                heading: 'Past Ph.D. Catalog',
+                meta: 'Effective for all students entered before Fall 2025.',
+                link: 'https://www.stonybrook.edu/bulletin-archives/all/graduate.html'
+            }
+        ];
+
+        function renderCatalogs() {
+            const filteredData = catalogData.filter(item => item.program === currentTab);
+
+            document.getElementById('catalogContent').innerHTML = filteredData.map(section => {
+                if (section.type === 'alert') {
+                    return `
+                        <section class="catalog-section">
+                            <h3>${section.title}</h3>
+                            <div class="alert">
+                                <h4>${section.heading}</h4>
+                                <p>${section.intro}</p>
+                                <ul><li><strong>${section.bullet}</strong></li></ul>
+                            </div>
+                        </section>`;
+                } else {
+                    let buttonsHTML = '';
+                    
+                    if (section.link2) {
+                        if (currentTab === 'bsms') {
+                            const isArchive = section.badge === 'Archive';
+                            buttonsHTML += `<a href="${section.link}" target="_blank" class="btn">📥 ${isArchive ? 'Download BS Archive' : 'Download BS Catalog'}</a>`;
+                            buttonsHTML += `<a href="${section.link2}" target="_blank" class="btn">📥 ${isArchive ? 'Download MS Archive' : 'Download MS Catalog'}</a>`;
+                        } else {
+                            buttonsHTML += `<a href="${section.link}" target="_blank" class="btn">📥 Link 1</a>`;
+                            buttonsHTML += `<a href="${section.link2}" target="_blank" class="btn">📥 Link 2</a>`;
+                        }
+                    } else {
+                        let btnText = 'Download PDF';
+                        if (currentTab === 'ms') btnText = 'Download MS Catalog';
+                        if (currentTab === 'phd') btnText = 'Download PhD Catalog';
+                        
+                        buttonsHTML = `<a href="${section.link}" target="_blank" class="btn">📥 ${btnText}</a>`;
+                    }
+
+                    return `
+                        <section class="catalog-section">
+                            <h3>${section.title}</h3>
+                            <p>${section.intro}</p>
+                            <div class="catalog-card">
+                                <div class="catalog-card-info">
+                                    <span class="pill">${section.badge}</span>
+                                    <h4>${section.heading}</h4>
+                                    <p>${section.meta}</p>
+                                </div>
+                                <div class="catalog-card-btns">
+                                    ${buttonsHTML}
+                                </div>
+                            </div>
+                        </section>`;
+                }
+            }).join('<div class="divider"></div>');
+        }
+
+        function switchCatalogTab(evt, progType) {
+            const buttons = document.querySelectorAll('.catalog-tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
+            
+            currentTab = progType;
+            renderCatalogs();
+        }
+
+        function toggleSidebarMenu(itemId) {
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(item => {
+                if (item.id === itemId) {
+                    item.classList.toggle('open');
+                } else {
+                    item.classList.remove('open');
+                }
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCatalogs();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Catalogs - Technology and Society</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .sub-banner { 
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    
+    .sidebar-accordion { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+    .accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background-color: #fff; color: var(--suny-navy); font-weight: bold; font-size: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .accordion-header:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .accordion-header span { font-size: 0.8rem; transition: transform 0.3s; }
+
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; list-style: none; padding-left: 10px; }
+    .accordion-content li a { display: block; padding: 10px 15px; color: #555; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid #edf2f7; transition: all 0.2s; }
+    .accordion-content li a:hover { color: var(--suny-red); padding-left: 20px; }
+    
+    .accordion-content li a.active { color: var(--sidebar-active-blue); font-weight: bold; }
+    .accordion-content li a.active::before { content: "• "; color: var(--sidebar-active-blue); }
+
+    .accordion-item.open .accordion-header { background-color: #edf2f7; color: var(--suny-navy); }
+    .accordion-item.open .accordion-header span { transform: rotate(180deg); }
+    .accordion-item.open .accordion-content { max-height: 200px; }
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-red); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.2rem; color: var(--suny-navy); font-weight: 700; }
+    
+    .content-container { background: white; padding: 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .catalog-shell { display: grid; gap: 24px; }
+    .catalog-section h3 { font-size: 1.4rem; color: var(--suny-navy); font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .catalog-section p { font-size: 1rem; color: #555; line-height: 1.6; margin-bottom: 12px; }
+    .catalog-card, .alert { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; }
+    .catalog-card { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .catalog-card h4 { color: var(--suny-navy); font-size: 1.2rem; margin: 6px 0 4px; font-weight: 700; }
+    .catalog-card p { margin: 0; color: #666; font-size: 0.9rem; }
+    .pill { display: inline-block; background: var(--suny-red); color: white; padding: 3px 8px; font-size: 0.75rem; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
+    .btn { background: var(--sidebar-active-blue); color: white; padding: 12px 22px; border-radius: 6px; font-weight: bold; font-size: 0.9rem; display: inline-block; }
+    .btn:hover { background: #002244; }
+    .alert { background: #fff5f5; border-color: #fca5a5; border-left: 4px solid var(--suny-red); }
+    .alert h4 { color: var(--suny-red); font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .alert ul { list-style: none; display: grid; gap: 10px; }
+    .alert li { font-size: 0.95rem; color: #444; line-height: 1.6; }
+    .subcontent { background: white; border: 1px solid #fee2e2; padding: 12px; border-radius: 6px; margin-top: 8px; font-size: 0.9rem; color: #555; }
+    .divider { height: 1px; background: #e2e8f0; margin: 6px 0 4px; }
+
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: none; }
+    .drawer-overlay.show { display: block; }
+    .nav-drawer { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: #ffffff; box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 2002; transition: right 0.3s ease; padding: 40px 20px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .menu-category { margin-bottom: 20px; }
+    .menu-category h3 { font-size: 1.1rem; color: var(--suny-navy); cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+    .menu-category h3 span { font-size: 0.8rem; transition: transform 0.3s; }
+    .drawer-sub-menu { list-style: none; padding-left: 10px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .drawer-sub-menu li a { display: block; padding: 8px 0; font-size: 0.95rem; color: #555; }
+    .drawer-sub-menu li a:hover { color: var(--suny-red); }
+    .menu-category.active .drawer-sub-menu { max-height: 500px; }
+    .menu-category.active h3 span { transform: rotate(180deg); }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="menu-container"></div>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>Academics</h2>
+            <ul class="sidebar-accordion">
+                
+                <li class="accordion-item open" id="ugrd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('ugrd-item')">
+                        Undergraduate (UGRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-ugrd-program.html">Program</a></li>
+                        <li><a href="academics-ugrd-catalog.html" class="active">Catalog</a></li>
+                        <li><a href="academics-ugrd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-ugrd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+
+                <li class="accordion-item" id="grd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('grd-item')">
+                        Graduate (GRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-grd-program.html">Program</a></li>
+                        <li><a href="academics-grd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-grd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-grd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">ACADEMICS &gt; UGRD &gt; CATALOG</div>
+
+            <div class="sub-page-header">
+                <h2>Catalogs (Required Term)</h2>
+            </div>
+
+            <div class="content-container">
+                <div id="catalogContent" class="catalog-shell"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script src="menu.js"></script>
+    <script>
+        const catalogSections = [
+            {
+                title: 'Academic Regulations',
+                type: 'alert',
+                heading: '⚠️ Leave of Absence & Graduation Requirements (Catalog Year)',
+                intro: 'Taking a Leave of Absence (LOA) for <strong>two or more semesters</strong> will automatically change your <strong>Required Term</strong>, altering your graduation requirements to the latest version that you rematriculated.',
+                bullet: '🎖️ Military Leave Exception: To maintain your original graduation requirements, you must officially select <strong>"Military LOA"</strong> when applying for leave, and submit an official <strong>Military Certificate</strong> upon rematriculation for validation.'
+            },
+            {
+                title: 'Official Academic Catalog',
+                type: 'card',
+                intro: 'Please download and review the official program handbook corresponding to your entry semester.',
+                badge: 'Current',
+                heading: 'Fall 2026 Undergraduate Catalog',
+                meta: 'Effective for all students entering in the Fall 2026 semester.',
+                link: 'https://catalog.stonybrook.edu/preview_program.php?catoid=11&poid=1506&returnto=1134'
+            },
+            {
+                title: 'Past Catalogs (Archive)',
+                type: 'card',
+                intro: 'If you are under a previous graduation requirement, please find your respective catalog below:',
+                badge: 'Current',
+                heading: 'Past Undergraduate Catalog',
+                meta: 'Effective for all students entered Fall 2026 semester.',
+                link: 'https://www.stonybrook.edu/bulletin-archives/all/undergraduate.html'
+            }
+        ];
+
+        document.getElementById('catalogContent').innerHTML = catalogSections.map(section => section.type === 'alert' ? `
+            <section class="catalog-section">
+                <h3>${section.title}</h3>
+                <div class="alert">
+                    <h4>${section.heading}</h4>
+                    <p>${section.intro}</p>
+                    <ul><li><strong>${section.bullet}</strong></li></ul>
+                    <div class="subcontent">
+                        <span style="color:#b91c1c;font-weight:700;">🚨 Crucial Warning (The One-Semester Rule):</span><br>
+                        <strong>Every single semester of your absence must be fully covered by the Military Certificate.</strong> If there is even a single semester left uncovered by your official service dates, your Required Term will change automatically without exception.
+                    </div>
+                </div>
+            </section>` : `
+            <section class="catalog-section">
+                <h3>${section.title}</h3>
+                <p>${section.intro}</p>
+                <div class="catalog-card">
+                    <div>
+                        <span class="pill">${section.badge}</span>
+                        <h4>${section.heading}</h4>
+                        <p>${section.meta}</p>
+                    </div>
+                    <a href="${section.link}" target="_blank" class="btn">📥 Download PDF</a>
+                </div>
+            </section>`).join('<div class="divider"></div>');
+
+        function toggleSidebarMenu(itemId) {
+            const allItems = document.querySelectorAll('.accordion-item');
+            allItems.forEach(item => {
+                if (item.id === itemId) {
+                    item.classList.toggle('open');
+                } else {
+                    item.classList.remove('open');
+                }
+            });
+        }
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer && overlay) {
+                drawer.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+        }
+        function toggleAccordion(element) {
+            if (element && element.parentElement) {
+                element.parentElement.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+</html>

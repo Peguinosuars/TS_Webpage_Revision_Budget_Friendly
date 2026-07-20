@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - Technology and Society</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .nav-drawer { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #ffffff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.4s ease; z-index: 2000; padding: 80px 30px 40px 30px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1999; }
+    .drawer-overlay.show { display: block; }
+    
+    .menu-category { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .menu-category > h3 { font-size: 1.15rem; color: var(--suny-navy); padding: 10px 5px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .drawer-sub-menu { list-style: none; padding-left: 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .menu-category.active .drawer-sub-menu { max-height: 800px; margin-top: 5px; margin-bottom: 10px; }
+    .menu-category li { margin-bottom: 12px; }
+    .menu-category a { font-size: 0.95rem; color: #555; font-weight: 600; display: block; }
+    
+    .sub-depth-group { margin-top: 10px; padding-left: 5px; }
+    .sub-depth-title { font-size: 0.9rem; color: var(--suny-navy); font-weight: bold; display: block; margin-bottom: 5px; }
+    .sub-depth-links { padding-left: 15px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .sub-depth-links a { font-weight: 500; color: #666; font-size: 0.88rem; }
+    .sub-banner {
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 240px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    .left-sidebar ul { list-style: none; }
+    .left-sidebar li a { display: block; padding: 13px 18px; color: #444; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; font-weight: 500; transition: all 0.2s ease; }
+    .left-sidebar li a:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .left-sidebar li a.active { background-color: var(--sidebar-active-blue); color: white !important; font-weight: bold; }
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-red); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.5rem; color: var(--suny-navy); text-transform: uppercase; }
+    .sub-page-header p { color: var(--suny-red); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; margin-top: 5px; }
+
+    .contact-box { background: white; border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e2e8f0; }
+    .map { width: 100%; height: 400px; background: #e5e3df; }
+    .map iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .contact-bar { background: #a31d1d; color: white; padding: 30px 35px; }
+    .contact-bar h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: 12px; }
+    .contact-bar p { display: flex; gap: 12px; font-size: 1rem; font-weight: 500; color: #f9f9f9; }
+    .contact-info { padding: 30px 35px; background: #fff; }
+    .contact-info ul { list-style: none; }
+    .contact-info li { font-size: 0.93rem; color: #555; margin-bottom: 4px; }
+    .contact-info li:first-child { font-weight: bold; color: #222; font-size: 1rem; margin-bottom: 8px; }
+    .contact-info strong { color: #333; display: inline-block; width: 60px; }
+    .contact-info a:hover { color: #a31d1d; text-decoration: underline; }
+
+    footer { background: #1a1a1a; color: #ccc; text-align: center; padding: 30px 20px; margin-top: 100px; font-size: 0.9rem; }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+        .contact-info-footer { flex-direction: column; align-items: flex-start; gap: 20px; }
+        .social-links-right { align-self: flex-end; }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="menu-container"></div>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>About Us</h2>
+            <ul>
+                <li><a href="about-what.html">What is TS</a></li>
+                <li><a href="about-why.html">Why TS</a></li>
+                <li><a href="about-chair.html">Message from the Chair</a></li>
+                <li><a href="about-mission.html">Mission & History & Vision</a></li>
+                <li><a href="about-contact.html" class="active">Contact US</a></li>
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">
+                ABOUT &gt; Contact US
+            </div>
+
+            <div class="sub-page-header">
+                <h2>Contact</h2>
+                <p>About / Contact</p>
+            </div>
+
+            <div class="contact-box">
+                <div class="map">
+                    <iframe src="https://maps.google.com/maps?q=SUNY%20Korea&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <div class="contact-bar">
+                    <h3>The Technology and Society</h3>
+                    <p><i class="fa-solid fa-location-dot"></i><span><strong>Address</strong>119-2 Songdo Moonhwa-ro Yeonsu-gu, Incheon, Korea 21985</span></p>
+                </div>
+                <div class="contact-info">
+                    <ul>
+                        <li>Department Contact Information</li>
+                        <li>• <strong>Phone :</strong> +82.32.626.1355</li>
+                        <li>• <strong>Email :</strong> <a href="mailto:ts@sunykorea.ac.kr">ts@sunykorea.ac.kr</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script src="menu.js"></script>
+
+    <script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer && overlay) {
+                drawer.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+        }
+        function toggleAccordion(element) {
+            if (element && element.parentElement) {
+                element.parentElement.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+</html>

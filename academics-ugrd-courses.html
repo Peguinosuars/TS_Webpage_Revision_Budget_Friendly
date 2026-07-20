@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undergraduate Courses - Technology and Society</title>
+<style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+    body{background:#f4f6f8;color:#333;line-height:1.6;overflow-x:hidden}
+    a{text-decoration:none;color:inherit;cursor:pointer}
+    :root{
+        --suny-red:#990000;
+        --suny-navy:#002244;
+        --sidebar-active-blue:#004488;
+        --tag-core: #0284c7;
+        --tag-ict: #16a34a;
+        --tag-bsms: #7c3aed;
+        --tag-AI: #4b5563;
+        --tag-SUNY-Korea-Only: #f11111;
+    }
+    header{background:#fff;padding:15px 50px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.1);position:sticky;top:0;z-index:1000}
+    .logo-container{display:flex;align-items:center;height:55px}
+    .nav-right-area{display:flex;align-items:center;gap:20px}
+    .search-tab{display:flex;align-items:center;background:#f0f2f5;padding:6px 12px;border-radius:20px;border:1px solid #e0e0e0}
+    .search-tab input{background:transparent;border:none;outline:none;font-size:.85rem;width:130px}
+    .search-tab button{background:none;border:none;font-size:.9rem;color:#666;margin-left:5px;cursor:pointer}
+    .more-toggle-btn{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:10px;z-index:2001}
+    .more-toggle-btn span{width:24px;height:3px;background:var(--suny-navy);border-radius:2px}
+    .sub-banner{background:linear-gradient(rgba(0,34,68,.4),rgba(0,34,68,.5)),url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;width:100%;height:350px}
+    .sub-page-container{max-width:1240px;margin:60px auto;padding:0 20px;display:flex;gap:50px;align-items:flex-start}
+    .left-sidebar{width:260px;flex-shrink:0;position:sticky;top:110px}
+    .left-sidebar h2{font-size:1.8rem;color:var(--suny-navy);padding-bottom:15px;border-bottom:2px solid var(--suny-navy);margin-bottom:15px;font-weight:bold}
+    .sidebar-accordion {list-style:none;display:flex;flex-direction:column;gap:5px}
+    .accordion-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:#fff;color:var(--suny-navy);font-weight:bold;font-size:1rem;border:1px solid #e2e8f0;border-radius:6px;cursor:pointer;transition:all .2s}
+    .accordion-header:hover{background:#f8f9fa;color:var(--suny-red)}
+    .accordion-header span{font-size:.8rem;transition:transform .3s}
+    .accordion-content{max-height:0;overflow:hidden;transition:max-height .3s ease-out;list-style:none;padding-left:10px}
+    .accordion-content li a{display:block;padding:10px 15px;color:#555;font-size:.9rem;font-weight:500;border-bottom:1px solid #edf2f7;transition:all .2s}
+    .accordion-content li a:hover{color:var(--suny-red);padding-left:20px}
+    .accordion-content li a.active{color:var(--sidebar-active-blue);font-weight:bold}
+    .accordion-content li a.active::before{content:'• ';color:var(--sidebar-active-blue)}
+    .accordion-item.open .accordion-header {background:#edf2f7;color:var(--suny-navy)}
+    .accordion-item.open .accordion-header span{transform:rotate(180deg)}
+    .accordion-item.open .accordion-content{max-height:220px}
+    .sub-page-wrapper{flex-grow:1;min-height:600px;width:0}
+    .breadcrumb-top{display:flex;justify-content:flex-end;font-size:.85rem;color:#666;margin-bottom:10px;text-transform:uppercase;font-weight:600;letter-spacing:.5px}
+    .sub-page-header{margin-bottom:40px;border-bottom:3px solid var(--suny-red);padding-bottom:15px}
+    .sub-page-header h2{font-size:2.2rem;color:var(--suny-navy);font-weight:700}
+    .content-container{background:#fff;padding:50px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+    .section-title{font-size:1.5rem;color:var(--suny-navy);font-weight:700;margin-bottom:20px;padding-bottom:8px;border-bottom:2px solid #e2e8f0;text-transform:uppercase;letter-spacing:.5px}
+    
+    .course-list{display:grid;gap:14px}
+    .course-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;transition:all 0.2s ease}
+    .course-card:hover{border-color:#cbd5e1;box-shadow:0 4px 12px rgba(0,0,0,0.03)}
+    
+    .course-trigger-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; cursor: pointer; background: #f8fafc; user-select: none; }
+    .course-trigger-left { display: flex; align-items: center; gap: 10px; }
+    .course-trigger-left h3 { font-size: 1.15rem; color: var(--suny-navy); font-weight: 700; letter-spacing: 0.5px; }
+    .course-trigger-right { display: flex; align-items: center; gap: 15px; }
+    .course-toggle-icon { font-size: 0.85rem; color: #94a3b8; transition: transform 0.3s ease; }
+
+    .course-sticker { display: inline-block; padding: 4px 10px; font-size: 0.75rem; font-weight: 800; border-radius: 4px; text-transform: uppercase; color: #fff; letter-spacing: 0.5px; }
+    .sticker-core { background: var(--tag-core); }
+    .sticker-ict { background: var(--tag-ict); }
+    .sticker-bsms { background: var(--tag-bsms); }
+    .sticker-AI { background: var(--tag-AI); }
+    .sticker-SUNY-Korea-Only { background: var(--tag-SUNY-Korea-Only); }
+    .sticker-elective { background: #6b7280; }
+    .course-expandable-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease-out;background:#fff;border-top:0 solid #e2e8f0}
+    .course-card.active-panel .course-expandable-content{max-height:1200px;border-top:1px solid #e2e8f0}
+    .course-card.active-panel .course-toggle-icon { transform: rotate(180deg); color: var(--suny-red); }
+    
+    .course-inner-body{padding:30px}
+    .course-main-title { font-size: 1.4rem; color: var(--suny-navy); font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+    .course-meta{font-size:.85rem;color:#64748b;margin-bottom:15px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+    .course-img{width:100%;max-height:280px;object-fit:cover;border-radius:6px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+    
+    .course-prereq-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px 15px; border-radius: 6px; font-size: 0.9rem; color: #166534; margin-bottom: 18px; }
+    
+    .course-card p{font-size:.95rem;color:#334155;margin-bottom:12px;line-height:1.7}
+    .course-additional-info{background:#f1f5f9;padding:15px;border-left:4px solid var(--suny-red);border-radius:0 4px 4px 0;font-size:0.9rem;color:#475569;margin-top:15px}
+
+    .drawer-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;display:none}
+    .drawer-overlay.show{display:block}
+    .nav-drawer{position:fixed;top:0;right:-300px;width:300px;height:100%;background:#fff;box-shadow:-2px 0 10px rgba(0,0,0,.1);z-index:2002;transition:right .3s ease;padding:40px 20px;overflow-y:auto}
+    .nav-drawer.open{right:0}
+    .menu-category{margin-bottom:20px}
+    .menu-category h3{font-size:1.1rem;color:var(--suny-navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid #eee}
+    .menu-category h3 span{font-size:.8rem;transition:transform .3s}
+    .drawer-sub-menu{list-style:none;padding-left:10px;max-height:0;overflow:hidden;transition:max-height .3s ease-out}
+    .drawer-sub-menu li a{display:block;padding:8px 0;font-size:.95rem;color:#555}
+    .drawer-sub-menu li a:hover{color:var(--suny-red)}
+    .menu-category.active .drawer-sub-menu{max-height:500px}
+    .menu-category.active h3 span{transform:rotate(180deg)}
+    footer{background:var(--suny-navy);color:#fff;text-align:center;padding:20px;margin-top:60px;font-size:.9rem}
+    @media (max-width:1024px){.sub-page-container{flex-direction:column;gap:40px}.left-sidebar{width:100%;position:static}.content-container{padding:24px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-container"><a href="index.html"><div style="height:50px;width:250px;background:#e0e0e0;border:2px dashed #999;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:#555;font-weight:bold;border-radius:4px">LOGO IMAGE PLACEHOLDER</div></a></div>
+  <div class="nav-right-area"><div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div><div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div></div>
+</header>
+<div id="menu-container"></div>
+<section class="sub-banner"></section>
+<div class="sub-page-container">
+  <nav class="left-sidebar">
+    <h2>Academics</h2>
+    <ul class="sidebar-accordion">
+      <li class="accordion-item open" id="ugrd-item">
+        <div class="accordion-header" onclick="toggleSidebarMenu('ugrd-item')">Undergraduate (UGRD) <span>▼</span></div>
+        <ul class="accordion-content">
+          <li><a href="academics-ugrd-program.html">Program</a></li>
+          <li><a href="academics-ugrd-catalog.html">Catalog</a></li>
+          <li><a href="academics-ugrd-milestones.html">Milestones</a></li>
+          <li><a href="academics-ugrd-courses.html" class="active">Courses</a></li>
+        </ul>
+      </li>
+      <li class="accordion-item" id="grd-item">
+        <div class="accordion-header" onclick="toggleSidebarMenu('grd-item')">Graduate (GRD) <span>▼</span></div>
+        <ul class="accordion-content">
+          <li><a href="academics-grd-program.html">Program</a></li>
+          <li><a href="academics-grd-catalog.html">Catalog</a></li>
+          <li><a href="academics-grd-milestones.html">Milestones</a></li>
+          <li><a href="academics-grd-courses.html">Courses</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <div class="sub-page-wrapper">
+    <div class="breadcrumb-top">ACADEMICS &gt; UGRD &gt; COURSES</div>
+    <div class="sub-page-header"><h2>Undergraduate Courses</h2></div>
+    <div class="content-container">
+      <div class="section-title">TS Department</div>
+      <div id="courseList" class="course-list"></div>
+    </div>
+  </div>
+</div>
+<footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+<script src="menu.js"></script>
+<script>
+const courses = [
+  {
+    code:'EST 100',
+    title:'Designing, Producing & Presenting Multimedia Projects',
+    meta:'3 credits',
+    track: 'AI Theme',
+    trackClass: 'sticker-AI',
+    prereq: 'None',
+    img:'https://images.unsplash.com/photo-1600869009498-8d429f88d4f5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'This course equips students with the essential skills to excel in the digital era through practical experience leveraging accessible computer applications and multimedia tools. Participants will explore digital media creation and adapt their projects for various digital platforms. The curriculum is designed to enhance information presentation skills using a range of web and app-based tools. Focusing on digital and multimedia literacy, the course develops competencies in design and presentation, culminating in the creation and showcase of a detailed portfolio of multimedia projects. This course aims to empower students to actively navigate and influence the digital world.'
+  },
+  {
+    code:'EST 110',
+    title:'The Digital Generation: Investigating AI Ethics, Social Impact and Real-World Application',
+    meta:'3 credits',
+    track: 'AI Theme',
+    trackClass: 'sticker-AI',
+    prereq: 'None',
+    img:'https://images.unsplash.com/photo-1772695653502-7c93f923a732?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'This course offers a comprehensive exploration of Artificial Intelligence (AI), covering its ethical implications, societal influence, technical foundations, and real-world applications. Through engaging discussions, case studies, and hands-on projects, you will develop a deeper understanding of AI’s transformative power, honing critical thinking and practical skills essential for navigating this evolving field. Whether considering a career in technology or simply seeking to be informed about this rapidly advancing field, this course provides a solid foundation for understanding AI’s potential and challenges.'
+  },
+  {
+    code:'EST 194',
+    title:'Decision-making',
+    meta:'3 credits',
+    track: 'Core Required',
+    trackClass: 'sticker-core',
+    prereq: 'TSM major',
+    img:'https://images.unsplash.com/photo-1764105720693-268d9c92f3c1?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'Reviews common justifications for decisions through quantitative, algorithmic processes and reducing multiple criteria to one variable. Covers basic concepts in cost-benefit analysis, risk assessment, decision trees, expected monetary value, and the analytical hierarchy process. Discussions include uncertainties associated with translating qualitative criteria into quantified variables and assigning values to probabilistic events.'
+  },
+  {
+    code:'EST 202',
+    title:'Introduction to Science, Technology, and Society Studies',
+    meta:'3 credits',
+    track: 'Core Required',
+    track2: 'BS/MS Required',
+    trackClass: 'sticker-core',
+    trackClass2: 'sticker-bsms',
+    prereq: 'TSM major',
+    img:'https://images.unsplash.com/photo-1546422904-90eab23c3d7e?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'The dynamics of the relations among modern science, the development and use of technology through engineering, and social concerns. Introduces basic concepts for science-technology studies. Ethical and policy issues that affect the management of science and engineering as expressed in technology are covered.'
+  },
+  {
+    code:'EST 205',
+    title:'Introduction to Technological Design: Innovation and Design Thinking',
+    meta:'3 credits',
+    track: 'ICT Specialization',
+    trackClass: 'sticker-ict',
+    prereq: 'None',
+    img:'https://images.unsplash.com/photo-1656543802898-41c8c46683a7?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'Using a design thinking approach to solve real world problems with technology, broadly defined. Design is treated as a universal human activity comprised of learnable principles, processes and skills. Students will identify a need (through empathy), define a problem, and work in a team on a technological solution, using prototyping and testing to refine their design. Over the semester, students will create and work on a collaborative website for their project. They will also learn two online technologies (one for 3D modeling, the other for app development) which they may use to prototype their design.'
+  },
+  {
+    code:'EST 221',
+    title:'Multimedia for Online Content Platforms',
+    meta:'3 credits',
+    prereq: 'None',
+    img:'https://images.unsplash.com/photo-1612043071344-94c20c4c837e?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'So you want to be an online content creator? Looking to dive into the world of YouTube, Instagram, TikTok, Reddit, etc? EST 221 builds on the multimedia asset building skills introduced in EST 100. Combine your photographic editing, graphic/logo design, and animation skills into a complete piece of online content for posting to online web content sites like YouTube, Instagram, and Reddit. Students will continue their exploration of the Adobe Creative Suite by developing their own videos (Adobe Premiere), audio samples/tracks (Adobe Audition), and graphics (Adobe Photoshop/Illustrator) to assemble content to post online. Learn to use the tools that some of the most popular YouTubers and online influencers use today and be limited only by your creativity and unique ideas.'
+  },
+  {
+    code:'EST 230',
+    title:'ICT for Sustainable Development',
+    meta:'3 credits',
+    track: 'ICT Specialization',
+    trackClass: 'sticker-ict',
+
+    prereq: 'None',
+    img:'https://images.unsplash.com/photo-1558449028-b53a39d100fc?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'The Internet is the largest engineered construction project in human history and it is generating sweeping social, political and economic change. Coinciding with this digital network revolution is a growing awareness of the challenge of environmental sustainability. Although the digital transformation is still in its early stages, the shape of certain technological tools and skills required for the hyper connected digital era are already apparent. The overarching theme of this course is to introduce the relationship of the emerging digital communication ecosystem, on the one hand, and possibilities for global environmental sustainability on the other. In the process, it introduces students to key digital literacies and technological skills.'
+  },
+  {
+    code:'EST 280',
+    title:'Fundamentals of Industrial Engineering',
+    meta:'3 credits',
+    prereq: 'C or higher in AMS 151 or MAT 131, or level 7 on the mathematics placement examination',
+    img:'https://images.unsplash.com/photo-1513257805917-a0da1146eb15?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'This course will cover Fundamental Industrial Engineering concepts and practices.'
+  },
+  {
+    code:'EST 304',
+    title:'Communication for Engineers and Scientists',
+    meta:'3 credits',
+    track: 'Core Required',
+    trackClass: 'sticker-core',
+    prereq: 'WRT 102 & TSM major',
+    img:'https://images.unsplash.com/photo-1669216369047-ea1120729538?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'In today’s society, it is essential for educated people to be able to present technical information to a range of audiences using various communication methods and styles. In EST 304, students learn how to communicate technical concepts that make sense not only to other scientists and engineers, but also to audiences ranging from students to technical consumers in the world marketplace. Course content emphasizes: writing clearly, concisely, and persuasively; creating effective visuals; presenting research verbally during oral presentations; providing and receiving feedback on assignments; and working collaboratively in groups. Written, verbal and visual communication styles are examined.'
+  },
+  {
+    code:'EST 305',
+    title:'App Software for Info Mgt',
+    meta:'3 credits',
+    prereq: 'EST 100 or CSE 101',
+    img:'https://images.unsplash.com/photo-1586448317606-cb1ec00298fc?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'Introduction to the role of applications software in various types of organizations with emphasis on methods of formulating the requisite information flows to engender adequate communications, operation, and control. The importance of audit ability, maintainability, and recoverability in systems design is stressed. Provides students with knowledge of basic techniques and elementary skills in representing system structure with application of the principles in practical case studies using spreadsheet and database software. Extensive interaction with applications software reinforces concepts presented.'
+  },
+  {
+    code:'EST 310',
+    title:'Design of Computer Games',
+    meta:'3 credits',
+    track: 'ICT Specialization',
+    trackClass: 'sticker-ict',
+    prereq: 'TSM or ISE major',
+    img:'https://images.unsplash.com/photo-1720908253963-db3b1b33921a?q=80&w=1119&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'Fundamental ideas underlying the design of games, which occurs before the programming stage. How games function to create experiences, including rule design, play mechanics, game balancing, social game interaction and the integration of visual, audio, tactile and textual elements into the total game experience. Game design documentation and play testing. Students will design their own game during the semester.'
+  },
+  {
+    code:'EST 320',
+    title:'Communication Tech Systems',
+    meta:'3 credits',
+    track: 'ICT Specialization',
+    trackClass: 'sticker-ict',
+    prereq: 'MAT 123 & one D.E.C. E or SNW course',
+    img:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'Emphasizes basic science and engineering concepts underlying design and usage of modern telecommunications systems. Considers effects of human factors and societal constraints on design and development of nascent technological systems. Includes the electromagnetic spectrum, analog and digital signals and resonance as well as societal considerations of government regulations, international competition, and environment.'
+  },
+  {
+    code:'EST 326',
+    title:'Management for Engineers',
+    meta:'3 credits',
+    prereq: 'WRT 102 & U3 or U4 standing',
+    img:'https://plus.unsplash.com/premium_photo-1661376741563-56e907c3ec0c?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'This course will introduce all the principals and theories in the area of operation management and quality control. The important issues relating to management of innovation and project management will also be included.'
+  },
+  {
+    code:'EST 331',
+    title:'Ethics in Engineering and AI Technologies',
+    meta:'3 credits',
+    track: 'Core Required', 
+    track2: 'AI Theme',
+    trackClass: 'sticker-core',
+    trackClass2: 'sticker-AI',
+    prereq: 'WRT 102 & U3 or U4 standing & TSM major',
+    img:'https://images.unsplash.com/photo-1589128560350-c9355f3a8c6d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    details:'Individuals and organizations must make ethical decisions during scientific and engineering endeavors. Various concepts have been developed related to moral conduct, character, ideals, and relationships between people, organizations, and societies, and these concepts relate to how we resolve our ethical issues. Formal frameworks for ethical decision making will be presented and tested through careful examination of case studies drawn from engineering and industry. Responsible AI development along with AI policy and governance will also be discussed.'
+  },
+  {
+    code:'EST 371',
+    title:'Introduction to Responsible AI and Data Science',
+    meta:'3 credits',
+    track: 'ICT Specialization',
+    track2: 'AI Theme',
+    track3: 'SUNY Korea Only',
+    trackClass: 'sticker-ict',
+    trackClass2: 'sticker-AI',
+    trackClass3: 'sticker-SUNY-Korea-Only',
+    prereq: 'AMS 161 or MAT 132 or MAT 127 & CSE 114 & U3 or U4 standing',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'This course will equip students with technical foundations in AI and data science while focusing on fairness, bias mitigation, and the responsible design and deployment of AI systems. The concepts of Artificial Intelligence, data science, and data analysis for technology management are introduced. Additionally, the impact of AI on society will be reviewed and studied.'
+  },
+  {
+    code:'EST 372',
+    title:'The Mobile Revolution in Development',
+    meta:'3 credits',
+    track: 'ICT Specialization',
+    track2: 'AI Theme',
+    track3: 'SUNY Korea Only',
+    trackClass: 'sticker-ict',
+    trackClass2: 'sticker-AI',
+    trackClass3: 'sticker-SUNY-Korea-Only',
+    prereq: 'AMS 161 or MAT 132 or MAT 127 & EST 320 & U3 or U4 standing',
+    coreq: 'CSE 114',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'This course will explore three themes: [1] current and future trends of digital formation technology toward mobility, [2] combined with many other technologies increasingly repurposed and adapted toward mobility and sustainability (wearable, IOT), [3] along with skills required for employing such arrangements effectively toward advancing social and economic development.'
+  },
+  {
+    code:'EST 391',
+    title:'Technology Assessment',
+    meta:'3 credits',
+    track: 'Core Required',
+    track2: 'BS/MS Required',
+    trackClass: 'sticker-core',
+    trackClass2: 'sticker-bsms',
+    prereq: 'MAT 127 or MAT 132 or AMS 161 & U3 or U4 & TSM or ISE major',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'This class focuses on technologies and the systems in which they evolve to highlight different forms of evaluating technology. An overview of various methods, approaches, and tools for evaluation will be provided, including SWOT, STIP, forecasting, lifecycle assessments, and impact and risk assessments. The class will provide a context and framework for understanding policy applications of various technologies, as well as broader societal implications. Challenges and opportunities of technological change will be examined in the context of societal implications, including environmental change, ethics, economics, science and engineering, and infrastructure. Students evaluate real-world technologies throughout the semester.'
+  },
+  {
+    code:'EST 392',
+    title:'Engineering Economics',
+    meta:'3 credits',
+    prereq: 'MAT 127 or MAT 132 or AMS 161 & TSM, CIV, ISE or MEC major',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'This course has a systems analysis approach to problems of planning and design in manufacturing and technical sectors of industry, using principles of cash flow equivalencies. It covers aspects of engineering alternatives through financial concepts including time value of money, annual cost, present worth, incremental rate of return and cost-benefit analysis, analysis of various types of cash flows, development of rate of return, benefit-to-cost ratios, depreciation and the effects of investment tax assessment. Capital allocation theory is used to evaluate competing investment programs.'
+  },
+  {
+    code:'EST 393',
+    title:'Project Management',
+    meta:'3 credits',
+    track: 'Core Required',
+    track2: 'BS/MS Required',
+    trackClass: 'sticker-core',
+    trackClass2: 'sticker-bsms',
+    prereq: 'MAT 127 or MAT 132 or AMS 161 & U3 or U4 & TSM or ISE major',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'This course addresses fundamental project management concepts and skills needed to successfully initiate, lead, monitor, control and realize projects execution. In this course, students explore project management with a practical approach through case studies and group projects.'
+  },
+  {
+    code:'EST 440',
+    title:'Interdisciplinary Research Methods',
+    meta:'3 credits',
+    track: 'Core Required',
+    trackClass: 'sticker-core',
+    prereq: 'EST 391 & TSM major & U4 standing',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'This course uses scientific research and engineering technology problem-solving as a framework for the synthesis of diverse disciplines studied by students in the first three undergraduate years. Provides students with experience in team problem-solving. Students will work in teams to conduct a technology assessment. Examples of various types of technology assessments will be studied, and students will discuss analysis techniques and team structuring in order to plan and execute a successful project.'
+  },
+  {
+    code:'EST 441',
+    title:'Interdisciplinary Senior Project',
+    meta:'3 credits',
+    track: 'Core Required',
+    trackClass: 'sticker-core',
+    prereq: 'EST 440',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'Students will select a technology-oriented topic, one that could be related to a selected class theme or be of their choosing. Students will work individually on the topic and present on their research. A paper will also be produced. A book on describing what “technology” is, and how new technologies develop, will be closely read.'
+  },
+  {
+    code:'EST 475',
+    title:'Undergraduate Teaching Practicum',
+    meta:'3 credits',
+    track: 'Elective',
+    trackClass: 'sticker-elective',
+    prereq: 'U3 or U4 standing as an undergraduate CEAS major & a minimum g.p.a. of 3.00 in all Stony Brook courses & grade of B or better in the course in which the student is to assist and permission of department.',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'Students assist the faculty in teaching by conducting recitation or laboratory sections that supplement a lecture course. The student receives regularly scheduled supervision from the faculty instructor. May be used as an open elective only and repeated once.'
+  },
+  {
+    code:'EST 488',
+    title:'Internship in Tech & Society',
+    meta:'3 credits',
+    track: 'Elective',
+    trackClass: 'sticker-elective',
+    prereq: 'TSM major & Permission of Department',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'Participation in a private enterprise, public agency, or nonprofit institution. Students are required to submit a proposal to the department at the time of registration that included the location, immediate supervisor, nature of the project and hours per week for the project. One mid-semester report and one end of semester report are required.'
+  },
+  {
+    code:'EST 499',
+    title:'Research in Tech & Society',
+    meta:'3 credits',
+    track: 'Elective',
+    trackClass: 'sticker-elective',
+    prereq: 'Permission of instructor',
+    img:'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    details:'An independent research project with faculty supervision. Permission to register requires a B average in all engineering courses and the agreement of a faculty member to supervise the research. May be repeated, but only three credits of research electives (AMS 487, CSE 487, ESE 499, EMS 499, EST 499, ISE 487, MEC 499) may be counted toward engineering technical elective requirements.'
+  }
+];
+
+const courseList = document.getElementById('courseList');
+if (courseList) {
+  courseList.innerHTML = courses.map((c, index) => {
+    const stickers = [];
+    if (c.track && c.trackClass) stickers.push(`<span class="course-sticker ${c.trackClass}">${c.track}</span>`);
+    if (c.track2 && c.trackClass2) stickers.push(`<span class="course-sticker ${c.trackClass2}">${c.track2}</span>`);
+    if (c.track3 && c.trackClass3) stickers.push(`<span class="course-sticker ${c.trackClass3}">${c.track3}</span>`);
+
+    const prereq = c.prereq && c.prereq !== 'None' ? `<div class="course-prereq-box"><strong>Prerequisite:</strong> ${c.prereq}</div>` : '';
+    const coreq = c.coreq ? `<div class="course-additional-info" style="border-left-color:#2563eb;"><strong>Corequisite:</strong> ${c.coreq}</div>` : '';
+
+    return `
+      <article class="course-card" id="course-card-${index}">
+        <div class="course-trigger-header" onclick="toggleCourseAccordion(${index})">
+          <div class="course-trigger-left">
+            <h3>${c.code}</h3>
+          </div>
+          <div class="course-trigger-right">
+            ${stickers.join(' ')}
+            <span class="course-toggle-icon">▼</span>
+          </div>
+        </div>
+        <div class="course-expandable-content">
+          <div class="course-inner-body">
+            <h4 class="course-main-title">${c.title}</h4>
+            <div class="course-meta">${c.meta}</div>
+            <img src="${c.img}" alt="${c.title}" class="course-img">
+            ${prereq}
+            <p>${c.details}</p>
+            ${coreq}
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function toggleCourseAccordion(index) {
+  const card = document.getElementById(`course-card-${index}`);
+  if (card) {
+    card.classList.toggle('active-panel');
+  }
+}
+
+function toggleSidebarMenu(itemId) {
+  document.querySelectorAll('.accordion-item').forEach(item => {
+    if (item.id === itemId) {
+      item.classList.toggle('open');
+    } else {
+      item.classList.remove('open');
+    }
+  });
+}
+
+function toggleDrawer() {
+  const drawer = document.getElementById('navDrawer');
+  const overlay = document.getElementById('drawerOverlay');
+  if (drawer && overlay) {
+    drawer.classList.toggle('open');
+    overlay.classList.toggle('show');
+  }
+}
+</script>
+</body>
+</html>

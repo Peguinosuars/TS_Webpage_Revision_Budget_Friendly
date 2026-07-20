@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undergraduate Program - Technology and Society</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .sub-banner { 
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    
+    .sidebar-accordion { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    
+    .accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background-color: #fff; color: var(--suny-navy); font-weight: bold; font-size: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .accordion-header:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .accordion-header span { font-size: 0.8rem; transition: transform 0.3s; }
+    
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; list-style: none; padding-left: 10px; }
+    .accordion-content li a { display: block; padding: 10px 15px; color: #555; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid #edf2f7; transition: all 0.2s; }
+    .accordion-content li a:hover { color: var(--suny-red); padding-left: 20px; }
+    
+    .accordion-content li a.active { color: var(--sidebar-active-blue); font-weight: bold; }
+    .accordion-content li a.active::before { content: "• "; color: var(--sidebar-active-blue); }
+
+    .accordion-item.open .accordion-header { background-color: #edf2f7; color: var(--suny-navy); }
+    .accordion-item.open .accordion-header span { transform: rotate(180deg); } 
+    .accordion-item.open .accordion-content { max-height: 200px;}
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-red); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.2rem; color: var(--suny-navy); }
+    .sub-page-header p { color: var(--suny-red); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; margin-top: 5px; }
+    
+    .content-container { background: white; padding: 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+    .ugrd-section { margin-bottom: 40px; }
+    .ugrd-section h3 { font-size: 1.4rem; color: var(--suny-navy); font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .ugrd-section p { font-size: 1rem; color: #555; line-height: 1.6; margin-bottom: 15px; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin: 20px 0; }
+    .stat-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; text-align: center; }
+    .stat-card .num { display: block; font-size: 1.8rem; font-weight: 800; color: var(--suny-red); margin-bottom: 5px; }
+    .stat-card .label { font-size: 0.9rem; color: #475569; font-weight: 600; }
+    .spec-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .spec-table th { background-color: #f1f5f9; color: var(--suny-navy); padding: 12px; text-align: left; font-size: 0.9rem; border-bottom: 2px solid #cbd5e1; }
+    .spec-table td { padding: 14px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; vertical-align: top; }
+    .badge { display: inline-block; background-color: #e2e8f0; color: #334155; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin: 2px; }
+    .badge-red { background-color: #fee2e2; color: #991b1b; }
+    .alert-box { background-color: #fff5f5; border: 1px solid #fca5a5; border-left: 4px solid var(--suny-red); padding: 20px; border-radius: 6px; margin-top: 15px; }
+    .alert-box h4 { color: var(--suny-red); font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+    .alert-box ul { list-style: none; }
+    .alert-box li { position: relative; padding-left: 15px; margin-bottom: 8px; font-size: 0.95rem; color: #444; }
+    .alert-box li::before { content: "•"; position: absolute; left: 0; color: var(--suny-red); font-weight: bold; }
+
+    /* menu.js 드로어 메뉴창 정상 구동 필수 CSS */
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: none; }
+    .drawer-overlay.show { display: block; }
+    .nav-drawer { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: #ffffff; box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 2002; transition: right 0.3s ease; padding: 40px 20px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .menu-category { margin-bottom: 20px; }
+    .menu-category h3 { font-size: 1.1rem; color: var(--suny-navy); cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+    .menu-category h3 span { font-size: 0.8rem; transition: transform 0.3s; }
+    .drawer-sub-menu { list-style: none; padding-left: 10px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .drawer-sub-menu li a { display: block; padding: 8px 0; font-size: 0.95rem; color: #555; }
+    .drawer-sub-menu li a:hover { color: var(--suny-red); }
+    .menu-category.active .drawer-sub-menu { max-height: 500px; }
+    .menu-category.active h3 span { transform: rotate(180deg); }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="menu-container"></div>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>Academics</h2>
+            <ul class="sidebar-accordion">
+                
+                <li class="accordion-item open" id="ugrd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('ugrd-item')">
+                        Undergraduate (UGRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-ugrd-program.html" class="active">Program</a></li>
+                        <li><a href="academics-ugrd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-ugrd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-ugrd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+
+                <li class="accordion-item" id="grd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('grd-item')">
+                        Graduate (GRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-grd-program.html">Program</a></li>
+                        <li><a href="academics-grd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-grd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-grd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">ACADEMICS &gt; UGRD &gt; PROGRAM</div>
+
+            <div class="sub-page-header">
+                <h2>Undergraduate Program</h2>
+            </div>
+
+            <div class="content-container">
+                <div class="ugrd-section">
+        <h3>Program Overview</h3>
+        <p>Technological Systems Management (TSM) prepares graduates to lead digital initiatives and manage major projects in fast-paced global environments of technological change and disruption.</p>
+        
+        <div class="grid-container">
+            <div class="stat-card">
+                <span class="num">120+</span>
+                <span class="label">Total Credits</span>
+            </div>
+            <div class="stat-card">
+                <span class="num">39</span>
+                <span class="label">Upper-Division Credits</span>
+            </div>
+            <div class="stat-card">
+                <span class="num">~79</span>
+                <span class="label">Major Requirements</span>
+            </div>
+        </div>
+        <p>• Upper-Division Credits can be earned by taking 3-400 lv. courses regardless of department.<br>• Upper-Division Credits will also count toward as total credits. </p>
+    </div>
+
+    <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 30px 0;">
+
+    <div class="ugrd-section">
+        <h3>Major Requirements for Graduation</h3>
+        <p>Students must complete all requirements in order to apply for their graduation.</p>
+        
+        <table class="spec-table">
+            <thead>
+                <tr>
+                    <th style="width: 35%;">Requirement</th>
+                    <th style="width: 65%;">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Core Courses</strong></td>
+                    <td>EST (194, 202, 304, 331, 391, 392, 393, 440, 441)<br>Student needs to get C or higher grade to pass the course.</td>
+                </tr>
+                <tr>
+                    <td><strong>1 Skills-Information Course</strong></td>
+                    <td>Student need to get C or higher grade to pass the course.<br>The course can be differ by each required term.
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>1 Design Course</strong></td>
+                    <td>Student need to get C or higher grade to pass the course.<br>The course can be differ by each required term.
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>3 Skills-Information Course</strong></td>
+                    <td>Student need to get C or higher grade to pass the course.<br>The course can be differ by each required term.
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Math Requirements</strong></td>
+                    <td>(AMS151 or MAT131) & (AMS 161 or MAT132)<br>Student need to get C or higher grade to pass the course.<br>The course can be differ by each required term.
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Natural Science Requirements (SNW)</strong></td>
+                    <td>Student need to get C or higher grade to pass the course.<br>The course can be differ by each required term.
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Specialization</strong></td>
+                    <td>Students must complete 1 specialization track</td>
+                </tr>
+                <tr>
+                    <td><strong>SBC Requirements</strong></td>
+                    <td>Students must complete SBC sections within,<br>ARTS, GLO, HUM, USA, WRT, DIV.</td>
+                </tr>
+            </tbody>
+            <tr>
+                    <td><strong>SBU visit</strong></td>
+                    <td>Students must complete their SBU visiting for 2 consecutive semesters during their sophomore year.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 30px 0;">
+
+    <div class="ugrd-section">
+        <h3>Areas of Specialization</h3>
+        <p>Students must complete 1 specialization track (about7 related courses, min 21 credits total).</p>
+        
+        <table class="spec-table">
+            <thead>
+                <tr>
+                    <th style="width: 35%;">Track</th>
+                    <th style="width: 65%;">Highlights</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Information and Communication Technology for Development (ICT4D)</strong></td>
+                    <td>Focuses on the application of ICT in global sustainable development frameworks. (SUNY Korea specialized track)</td>
+                </tr>
+                <tr>
+                    <td><strong>Computer Science (CSE)</strong></td>
+                    <td>Combines rigorous software engineering and database skills with technology policy. It empowers students to leverage core IT structures to build smart cities, manage digital networks, and solve complex global challenges.
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Applied Math & Stats (AMS)</strong></td>
+                    <td>Engages with quantitative structures, statistical data modeling, and advanced decision analytics.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr style="border: 0; height: 1px; background: #e2e8f0; margin: 30px 0;">
+
+<div class="ugrd-section">
+        <h3>Stony Brook University Visit Requirement</h3>
+        <p>Visiting Stony Brook University for 2 semesters is required for graduation.</p>
+        
+        <div class="alert-box">
+            <h4>Requirements for visiting SBU</h4>
+            <ul>
+                <li><strong>Prerequisites:</strong>  <strong>C or higher</strong> in Calculus I(AMS151 or MAT131) and the WRT 101 course.</li>
+                <li><strong>Minimum GPA:</strong> Cumulative GPA of <strong>2.0 or higher</strong> is strictly required.</li>
+                <li><strong>Academic Standing:</strong> Sophomore year.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="ugrd-section">
+        <h3>Major Transfer</h3>
+        <p>Criteria for Non-CEAS students transferring to TSM, or AOI pre-majors declaring the formal major.</p>
+        
+        <div class="alert-box">
+            <h4>Requirements for Acceptance into the Major</h4>
+            <ul>
+                <li><strong>Prerequisites:</strong>  <strong>C or higher</strong> in Calculus I, Calculus II, and the SNW course.</li>
+                <li><strong>Minimum GPA:</strong> Cumulative GPA of <strong>2.80 or higher</strong> is strictly required.</li>
+                <li><strong>Time Limit:</strong> All requirements must be met within <strong>1 year</strong> of enrolling in the first major-entry course.</li>
+                <li><strong>Note:</strong> Fulfilling requirements does not guarantee entry; admission is competitive and subject.</li>
+            </ul>
+        </div>
+    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script src="menu.js"></script>
+    <script>
+        function toggleSidebarMenu(itemId) {
+            const allItems = document.querySelectorAll('.accordion-item');
+            
+            allItems.forEach(item => {
+                if (item.id === itemId) {
+                    item.classList.toggle('open');
+                } else {
+                    item.classList.remove('open');
+                }
+            });
+        }
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer && overlay) {
+                drawer.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+        }
+        function toggleAccordion(element) {
+            if (element && element.parentElement) {
+                element.parentElement.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+</html>

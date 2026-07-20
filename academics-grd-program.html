@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graduate Programs - Technology and Society</title>
+<style>
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+        --border: #e2e8f0;
+        --text: #334155;
+        --muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: #f4f6f8; color: var(--text); line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+
+    header {
+        background: white;
+        padding: 15px 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f8fafc; padding: 6px 12px; border-radius: 999px; border: 1px solid #e2e8f0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.9rem; width: 140px; color: var(--text); }
+    .search-tab button { background: none; border: none; font-size: 0.95rem; color: var(--muted); margin-left: 5px; cursor: pointer; }
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .sub-banner {
+        background: linear-gradient(rgba(0, 34, 68, 0.38), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+        width: 100%;
+        height: 320px;
+    }
+
+    .sub-page-container {
+        max-width: 1240px;
+        margin: 56px auto;
+        padding: 0 20px;
+        display: flex;
+        gap: 42px;
+        align-items: flex-start;
+    }
+    .left-sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 100px; }
+    .left-sidebar h2 {
+        font-size: 1.7rem;
+        color: var(--suny-navy);
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--suny-navy);
+        margin-bottom: 14px;
+        font-weight: 700;
+    }
+    .sidebar-accordion { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 13px 16px;
+        background: white;
+        color: var(--suny-navy);
+        font-weight: 700;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .accordion-header:hover { background: #f8fafc; color: var(--suny-red); }
+    .accordion-header span { font-size: 0.8rem; transition: transform 0.2s ease; }
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        list-style: none;
+        padding-left: 10px;
+        margin-top: 4px;
+    }
+    .accordion-content li a {
+        display: block;
+        padding: 9px 12px;
+        color: #55627a;
+        font-size: 0.92rem;
+        font-weight: 500;
+        border-bottom: 1px solid #eff2f7;
+        transition: all 0.2s ease;
+    }
+    .accordion-content li a:hover { color: var(--suny-red); padding-left: 16px; }
+    .accordion-content li a.active { color: var(--sidebar-active-blue); font-weight: 700; }
+    .accordion-content li a.active::before { content: "• "; color: var(--sidebar-active-blue); }
+    .accordion-item.open .accordion-header { background: #edf2f7; color: var(--suny-navy); }
+    .accordion-item.open .accordion-header span { transform: rotate(180deg); }
+    .accordion-item.open .accordion-content { max-height: 220px; }
+
+    .sub-page-wrapper { flex: 1; min-height: 600px; }
+    .breadcrumb-top {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 0.84rem;
+        color: #666;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .sub-page-header {
+        margin-bottom: 28px;
+        border-bottom: 3px solid var(--suny-red);
+        padding-bottom: 14px;
+    }
+    .sub-page-header h2 { font-size: 2.1rem; color: var(--suny-navy); font-weight: 700; }
+    .sub-page-header p { margin-top: 6px; color: var(--suny-red); font-weight: 600; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.6px; }
+
+    .content-container {
+        background: white;
+        padding: 34px;
+        border-radius: 14px;
+        box-shadow: 0 6px 26px rgba(0,0,0,0.06);
+    }
+    .grad-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 10px;
+    }
+    .grad-tab-btn {
+        padding: 10px 16px;
+        font-weight: 700;
+        border: 1px solid var(--border);
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        color: var(--suny-navy);
+        transition: all 0.2s ease;
+    }
+    .grad-tab-btn:hover { background: #f8fafc; color: var(--suny-red); }
+    .grad-tab-btn.active { background: var(--sidebar-active-blue); color: white; border-color: var(--sidebar-active-blue); }
+
+    .program-content { display: none; }
+    .program-content.active { display: block; }
+    .program-intro { margin-bottom: 24px; padding: 16px 18px; background: #f8fafc; border-left: 4px solid var(--suny-red); border-radius: 8px; }
+    .program-intro p { color: #475569; margin-bottom: 6px; }
+    .program-intro p:last-child { margin-bottom: 0; }
+
+    .detail-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px 22px;
+        margin-bottom: 18px;
+    }
+    .detail-card h3 {
+        font-size: 1.1rem;
+        color: var(--suny-navy);
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+    }
+    .info-list { list-style: none; display: flex; flex-direction: column; gap: 8px; color: #475569; }
+    .info-list li { padding-left: 0; }
+    .info-list strong { color: var(--suny-navy); }
+    .note { display: block; margin-top: 6px; font-size: 0.9rem; color: #64748b; }
+
+    .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+        text-align: left;
+        margin-top: 8px;
+    }
+    .info-table th {
+        background: #f8fafc;
+        color: var(--suny-navy);
+        padding: 11px 12px;
+        border: 1px solid var(--border);
+        font-weight: 700;
+    }
+    .info-table td {
+        padding: 11px 12px;
+        border: 1px solid var(--border);
+        vertical-align: top;
+    }
+    .info-table tr:nth-child(even) td { background: #fcfdff; }
+    .custom-link { color: var(--sidebar-active-blue); font-weight: 700; }
+    .milestone-card {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+        background: #fcfdff;
+    }
+    .milestone-card h4 { color: var(--suny-red); font-size: 1rem; margin-bottom: 8px; font-weight: 700; }
+    .milestone-card p { color: #475569; margin-bottom: 4px; }
+
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: none; }
+    .drawer-overlay.show { display: block; }
+    .nav-drawer { position: fixed; top: 0; right: -320px; width: 320px; height: 100%; background: #ffffff; box-shadow: -2px 0 14px rgba(0,0,0,0.12); z-index: 2002; transition: right 0.3s ease; padding: 40px 20px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .menu-category { margin-bottom: 20px; }
+    .menu-category h3 { font-size: 1.05rem; color: var(--suny-navy); cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #eee; }
+    .menu-category h3 span { font-size: 0.8rem; transition: transform 0.3s; }
+    .drawer-sub-menu { list-style: none; padding-left: 10px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .drawer-sub-menu li a { display: block; padding: 8px 0; font-size: 0.95rem; color: #555; }
+    .drawer-sub-menu li a:hover { color: var(--suny-red); }
+    .menu-category.active .drawer-sub-menu { max-height: 500px; }
+    .menu-category.active h3 span { transform: rotate(180deg); }
+
+    @media (max-width: 1024px) {
+        header { padding: 15px 24px; }
+        .sub-page-container { flex-direction: column; gap: 30px; }
+        .left-sidebar { width: 100%; position: static; }
+        .content-container { padding: 24px; }
+    }
+</style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="menu-container"></div>
+    <section class="sub-banner" aria-label="Graduate program banner"></section>
+
+    <div class="sub-page-container">
+        <nav class="left-sidebar">
+            <h2>Academics</h2>
+            <ul class="sidebar-accordion">
+                <li class="accordion-item" id="ugrd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('ugrd-item')">
+                        Undergraduate (UGRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-ugrd-program.html">Program</a></li>
+                        <li><a href="academics-ugrd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-ugrd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-ugrd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+
+                <li class="accordion-item open" id="grd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('grd-item')">
+                        Graduate (GRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-grd-program.html" class="active">Program</a></li>
+                        <li><a href="academics-grd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-grd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-grd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">Academics &gt; GRD &gt; Program</div>
+
+            <div class="sub-page-header">
+                <h2>Graduate Program</h2>
+            </div>
+
+            <div class="content-container">
+                <div class="grad-tabs" role="tablist">
+                    <button class="grad-tab-btn active" onclick="switchGradTab(event, 'bsms')">Accelerated BS/MS Program</button>
+                    <button class="grad-tab-btn" onclick="switchGradTab(event, 'ms')">MS Program</button>
+                    <button class="grad-tab-btn" onclick="switchGradTab(event, 'phd')">PhD Program</button>
+                </div>
+
+                <div id="bsms" class="program-content active">
+                    <div class="program-intro">
+                        <p>The Accelerated BS/MS program offers a streamlined pathway for high-achieving SUNY Korea TSM undergraduate students to earn both their Bachelor's and Master's degrees within five years by counting graduate-level courses taken during their senior year toward both degrees.</p>
+                        <p>Anyone who has questions regarding the program, please contact the <a href="https://ts.sunykorea.ac.kr/ts/html/sub04/0401.html?mode=V&mng_no=0ce261d7143b46ab0fa3804a4f17f3cc" class="custom-link" target="_blank">department graduate program director</a>.</p>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📌 Eligibility Requirements</h3>
+                        <ul class="info-list">
+                            <li><strong>Current Major:</strong> Technology and Society Undergraduate Students.</li>
+                            <li><strong>Current Academic Standing:</strong> Last semester of Junior year.</li>
+                            <li><strong>Cumulative GPA:</strong> 3.00 or higher at the time of application.</li>
+                            <li><strong>Prerequisite Coursework:</strong> EST 202, EST 391, and EST 393 (combined GPA on these three courses ≥ 3.25)</li>
+                            <li><strong>Timeline Constraint:</strong> Students must have two semesters remaining to complete graduate courses.</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📁 Required Documentation</h3>
+                        <ul class="info-list">
+                            <li><strong>Curriculum Vitae (CV):</strong> Detailed research and academic profile.</li>
+                            <li><strong>Statement of Purpose:</strong> Please include the following information: <br>• Max. 3 pages detailing relevant experience, <br>• Goals: short-term, long-term <br>• Wanted accomplishments with MS.</li>
+                            <li><strong>Transcript:</strong> Most recent unofficial academic transcript.</li>
+                            <li><strong>Recommendation Letters:</strong> At least two letters are required.
+                                <span class="note">* At least one letter must be from a current DTS faculty member, sent directly to the department.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📚 Key Accelerated Pathway Courses</h3>
+                        <p>To fulfill the accelerated transition smoothly, students transition into core TSM graduate courses during their remaining semesters:</p>
+                        <table class="info-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Title</th>
+                                    <th>Graduate Credits</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>EST 581</strong></td>
+                                    <td>Decision-making in Technology Settings</td>
+                                    <td>3 credits</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EST 582</strong></td>
+                                    <td>Socio-Technological Systems</td>
+                                    <td>3 credits</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="ms" class="program-content">
+                    <div class="program-intro">
+                        <p>The MS program prepares students for leadership in technology, policy, and systems-based organizations.</p>
+                        <p>Anyone who has questions regarding the program, please contact the <a href="https://ts.sunykorea.ac.kr/ts/html/sub04/0401.html?mode=V&mng_no=0ce261d7143b46ab0fa3804a4f17f3cc" class="custom-link" target="_blank">department graduate program director</a>.</p>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📌 Eligibility Requirements</h3>
+                        <ul class="info-list">
+                            <li><strong>Degree:</strong> Bachelor's degree in engineering, science, mathematics, policy, or a related field.</li>
+                            <li><strong>GPA:</strong> Minimum undergraduate GPA of 3.00.</li>
+                            <li><strong>Letters:</strong> Three letters of recommendation.</li>
+                            <li><strong>English:</strong> TOEFL minimum 85 / IELTS overall 6.5 (no band below 6.0).</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📁 Required Documentation</h3>
+                        <ul class="info-list">
+                            <li><strong>Curriculum Vitae (CV):</strong> Detailed research and academic profile.</li>
+                            <li><strong>Statement of Purpose:</strong> Academic goals, research interests, and career plans.</li>
+                            <li><strong>Transcripts:</strong> Undergraduate transcripts (only official is allowed).</li>
+                            <li><strong>Recommendations:</strong> At least three letters, including one from academic faculty.</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📚 Core Required Courses (15 Credits)</h3>
+                        <table class="info-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Title</th>
+                                    <th>Credits</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>EMP 501</strong></td>
+                                    <td>Leadership</td>
+                                    <td>3 credits</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EST 581</strong></td>
+                                    <td>Decision-making in Technology Settings</td>
+                                    <td>3 credits</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EST 502</strong></td>
+                                    <td>Ethical Decisions in Engineering, Computer Science</td>
+                                    <td>3 credits</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EST 582</strong></td>
+                                    <td>Socio-Technological Systems</td>
+                                    <td>3 credits</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EST 590</strong></td>
+                                    <td>Seminar for MS, TSM Students</td>
+                                    <td>3 credits</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td><strong>Master’s Project (Supervised by faculty)</strong></td>
+                                    <td>0 credits</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>🎯 Areas of Concentration</h3>
+                        <table class="info-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Concentration</th>
+                                    <th style="width: 65%;">Focus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Technology Management</strong><br>Available in SUNY Korea</td>
+                                    <td>Project management, engineering economics, leadership in tech org.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Resilience & Sustainability</strong><br>Not available in SUNY Korea</td>
+                                    <td>Infrastructure resilience, sustainable systems, and risk-informed decision-making.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Educational Technology</strong><br>Not available in SUNY Korea</td>
+                                    <td>Design of digital learning systems, multimedia instruction, and distance education innovation.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>🎓 Master’s Project Requirement</h3>
+                        <p>Develop an applied project with faculty-supervised deliverables.</p>
+                    </div>
+                </div>
+
+                <div id="phd" class="program-content">
+                    <div class="program-intro">
+                        <p>The PhD program in Technology, Policy, and Innovation is designed for researchers in socio-technical systems, technology governance, and innovation policy.</p>
+                        <p>If student joins the program, the student will be required to visit Stony Brook University (SBU) to complete their required courses (SOC/POL: 501 &502) for Part B and prepare for Part A.</p>
+                        <p>If the student earned 21 credits toward their PhD program, the 7-year-time-limit will begin and the student will be required to complete their PhD within the time.</p>
+                        <p>Anyone who has questions regarding the program, please contact the <a href="https://ts.sunykorea.ac.kr/ts/html/sub04/0401.html?mode=V&mng_no=0ce261d7143b46ab0fa3804a4f17f3cc" class="custom-link" target="_blank">department graduate program director</a>.</p>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📌 Eligibility Requirements</h3>
+                        <ul class="info-list">
+                            <li><strong>Degree:</strong> Bachelor's degree in engineering, science, mathematics, policy, or a related field.</li>
+                                <span class="note">*Note: Master's degree is not required for TPI PhD program. Direct PhD is available.</span>
+                            <li><strong>GPA:</strong> Minimum undergraduate GPA of 3.00 and strong academic preparation.</li>
+                            <li><strong>Letters of Recommendation:</strong> Three academic or research references.</li>
+                            <li><strong>Research Preparedness:</strong> Evidence of prior academic research experience or relevant project work.</li>
+                            <li><strong>English:</strong> TOEFL minimum 85 / IELTS overall 6.5 (no band below 6.0).</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📁 Required Documentation</h3>
+                        <ul class="info-list">
+                            <li><strong>Curriculum Vitae (CV):</strong> Detailed research and academic profile.</li>
+                            <li><strong>Statement of Purpose:</strong> Research objectives and academic fit with the department.</li>
+                            <li><strong>Official Transcripts:</strong> Undergraduate and any graduate records.</li>
+                            <li><strong>Letters of Recommendation:</strong> Three letters from faculty or research supervisors.
+                                <span class="note">* At least one letter must be from academic field.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>🔬 Areas of Concentration</h3>
+                        <table class="info-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 35%;">Focus Area</th>
+                                    <th style="width: 65%;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Technology Policy & Innovation</strong></td>
+                                    <td>Research on regulation, governance, and the social impacts of emerging technologies.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>📝 Doctoral Milestones & Exams</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div class="milestone-card">
+                                <h4>1. Parts B (@ SUNY Korea & SBU)</h4>
+                                <p>Achieve and complete a 3.70 average in required courses: <br>• EST 600, EST 610, EST 625, SOC 501 or POL 501, SOC 502 or POL 502<br>• SOC/POL 501 & 502 are not offered at SUNY Korea. Students are required to visit SBU for those courses.</p>
+                                <p><strong>Note 1:</strong> Students must pass Part B first and then proceed to Part A.</p>
+                                <p><strong>Note 2:</strong> Students must maintain a minimum letter grade of A- on all Part B courses.</p>
+                            </div>
+                            <div class="milestone-card">
+                                <h4>2. Part A (@ SBU)</h4>
+                                <p>Submit a written report and present original research by the fourth semester.</p>
+                            </div>
+                            <div class="milestone-card">
+                                <h4>3. Dissertation Proposal Defense (@ SBU & SUNY Korea)</h4>
+                                <p>Defend a written research proposal within 18 months of the qualifying exam.</p>
+                            </div>
+                            <div class="milestone-card">
+                                <h4>4. Advancement to Candidacy (@ SUNY Korea)</h4>
+                                <p>Advance to G5 status and maintain active research registration.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <h3>🎓 Graduation & Residency Requirements</h3>
+                        <ul class="info-list">
+                            <li><strong>Dissertation Committee:</strong> During SBU visiting, student is recommended to form a dissertation committee. Generally, the committee members should be included 2 from SBU, 2 from SUNY Korea, at least 1 from external institution. Advising faculty of the student is not allowed to be a committe chair.</li>
+                            <li><strong>Teaching Requirement:</strong> Taking a 'Teaching or Practicum Experience' is required for graduation.</li>
+                            <li><strong>SBU Residency:</strong> Complete at least two consecutive semesters at SBU as full-time is required for the program.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="menu.js"></script>
+    <script>
+        function toggleSidebarMenu(id) {
+            const item = document.getElementById(id);
+            if (!item) return;
+            const isOpen = item.classList.contains('open');
+            document.querySelectorAll('.accordion-item').forEach(function (entry) {
+                entry.classList.remove('open');
+            });
+            if (!isOpen) item.classList.add('open');
+        }
+
+        function switchGradTab(event, tabId) {
+            document.querySelectorAll('.grad-tab-btn').forEach(function (button) {
+                button.classList.remove('active');
+            });
+            document.querySelectorAll('.program-content').forEach(function (panel) {
+                panel.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
+    <script>
+        function toggleSidebarMenu(id) {
+            const item = document.getElementById(id);
+            if (!item) return;
+            item.classList.toggle('open');
+        }
+
+        function switchGradTab(event, progId) {
+            const buttons = document.querySelectorAll('.grad-tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            const contents = document.querySelectorAll('.program-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+            const target = document.getElementById(progId);
+            if (target) {
+                target.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

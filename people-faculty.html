@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faculty - Technology and Society</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .nav-drawer { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #ffffff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.4s ease; z-index: 2000; padding: 80px 30px 40px 30px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1999; }
+    .drawer-overlay.show { display: block; }
+    .menu-category { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .menu-category > h3 { font-size: 1.15rem; color: var(--suny-navy); padding: 10px 5px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .drawer-sub-menu { list-style: none; padding-left: 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .menu-category.active .drawer-sub-menu { max-height: 800px; margin-top: 5px; margin-bottom: 10px; }
+    .menu-category li { margin-bottom: 12px; }
+    .menu-category a { font-size: 0.95rem; color: #555; font-weight: 600; display: block; }
+
+    .sub-banner { 
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 240px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    .left-sidebar ul { list-style: none; }
+    .left-sidebar li a { display: block; padding: 13px 18px; color: #444; font-size: 0.95rem; border-bottom: 1px solid #e2e8f0; font-weight: 500; transition: all 0.2s ease; }
+    .left-sidebar li a:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .left-sidebar li a.active { background-color: var(--sidebar-active-blue); color: white !important; font-weight: bold; }
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-red); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.2rem; color: var(--suny-navy); }
+    .sub-page-header p { color: var(--suny-red); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; margin-top: 5px; }
+    
+    .faculty-container { background: white; padding: 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+    .faculty-tab-nav { display: flex; width: 100%; border-bottom: 2px solid #cbd5e1; margin-bottom: 30px; gap: 5px; }
+    .faculty-tab-btn { flex: 1; padding: 15px 20px; font-size: 1.05rem; font-weight: bold; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; border-bottom: none; border-radius: 8px 8px 0 0; cursor: pointer; transition: all 0.2s ease; margin-bottom: -2px; text-align: center; }
+    .faculty-tab-btn:hover { color: var(--suny-red); background: #fff; }
+    .faculty-tab-btn.active { color: white; background-color: var(--suny-navy); border-color: var(--suny-navy); }
+    .faculty-tab-btn.active.sbu-active { background-color: var(--suny-red); border-color: var(--suny-red); }
+
+    .faculty-search-bar { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 15px 20px; display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 30px; border-radius: 6px; }
+    .search-select { padding: 6px 12px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 4px; background: #fff; }
+    .search-input { padding: 6px 12px; font-size: 0.85rem; border: 1px solid #cbd5e1; border-radius: 4px; width: 220px; outline: none; }
+    .search-submit-btn { background-color: var(--suny-navy); color: white; border: none; padding: 6px 18px; font-size: 0.85rem; border-radius: 4px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+    .search-submit-btn:hover { background-color: var(--suny-red); }
+
+    .faculty-list { display: flex; flex-direction: column; }
+    .faculty-card { display: flex; gap: 30px; padding: 35px 0; border-bottom: 1px dotted #cbd5e1; align-items: flex-start; transition: opacity 0.2s ease; }
+    .faculty-card.hidden { display: none !important; } 
+    .faculty-card:last-child { border-bottom: none; }
+
+    .faculty-photo-box { width: 140px; height: 175px; background-color: #f1f5f9; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); flex-shrink: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+    .photo-placeholder { font-size: 0.75rem; color: #64748b; font-weight: 600; text-align: center; padding: 10px; line-height: 1.4; }
+
+    .faculty-info { flex-grow: 1; }
+    .faculty-info .name { font-size: 1.35rem; color: var(--sidebar-active-blue); font-weight: 700; margin-bottom: 12px; display: inline-block; }
+    .faculty-info .name:hover { text-decoration: underline; color: var(--suny-red); }
+
+    .faculty-badge { display: inline-block; padding: 3px 8px; font-size: 0.72rem; font-weight: bold; border-radius: 4px; margin-left: 10px; vertical-align: middle; }
+    .badge-suny { background-color: #e2e8f0; color: var(--suny-navy); }
+    .badge-sbu { background-color: #fee2e2; color: var(--suny-red); }
+
+    .info-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; font-size: 0.95rem; color: #4a5568; }
+    .info-row a:hover { color: var(--suny-red); text-decoration: underline; }
+
+    .faculty-description { margin-top: 15px; font-size: 0.9rem; color: #64748b; line-height: 1.6; padding: 15px; background: #f8fafc; border-radius: 6px; border-left: 4px solid var(--suny-navy); text-align: justify; }
+
+    .no-results { text-align: center; padding: 40px 0; color: #64748b; font-weight: 500; font-size: 1rem; display: none; }
+
+    footer { background: #1a1a1a; color: #ccc; text-align: center; padding: 40px 20px; margin-top: 100px; }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+        .faculty-tab-nav { flex-direction: column; border-bottom: none; gap: 2px; }
+        .faculty-tab-btn { border-radius: 4px; margin-bottom: 0; text-align: center; }
+        .faculty-card { flex-direction: column; gap: 20px; align-items: center; text-align: center; }
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div id="menu-container"></div>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>People</h2>
+            <ul>
+                <li><a href="people-faculty.html" class="active">Faculty</a></li>
+                <li><a href="people-staff.html">Administrative Staff</a></li>
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">
+                PEOPLE &gt; Faculty
+            </div>
+
+            <div class="sub-page-header">
+                <h2>Faculty Members</h2>
+                <p>People / Faculty</p>
+            </div>
+
+            <div class="faculty-container">
+                
+                <div class="faculty-tab-nav">
+                    <button class="faculty-tab-btn active" onclick="switchTab('suny', this)">SUNY Korea Faculty</button>
+                    <button class="faculty-tab-btn" onclick="switchTab('sbu', this)">Stony Brook Faculty</button>
+                </div>
+
+                <div class="faculty-search-bar">
+                    <select class="search-select">
+                        <option>Professor Name</option>
+                    </select>
+                    <input type="text" class="search-input" id="facultySearchInput" placeholder="Keyword">
+                    <button class="search-submit-btn" onclick="filterFaculty()">Search</button>
+                </div>
+
+                <div class="no-results" id="noResultsMessage">No matching faculty members found.</div>
+
+                <div class="faculty-list" id="facultyList"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script src="menu.js"></script>
+
+    <script>
+        function toggleDrawer() {
+            document.getElementById('navDrawer').classList.toggle('open');
+            document.getElementById('drawerOverlay').classList.toggle('show');
+        }
+        function toggleAccordion(element) {
+            element.parentElement.classList.toggle('active');
+        }
+
+        let currentTabType = 'suny';
+        const facultyData = [
+            { type: 'sbu', name: 'Klaus Muller', badge: 'Stony Brook', title: 'Professor and Acting Chair', email: 'klaus.mueller@stonybrook.edu', description: 'Visual analytics, explainable machine learning and AI, algorithmic fairness and transparency, data science and computational and medical imaging.' },
+            { type: 'sbu', name: 'Kevin M. Moriarty', badge: 'Stony Brook', title: 'Undergraduate Program Director, Professor of Practice', email: 'kevin.moriarty@stonybrook.edu', description: 'Executive Leadership, Technical Management, quantitative methods, Engineering Economic principles & concepts' },
+            { type: 'sbu', name: 'Lori Scarlatos', badge: 'SUNY Korea', title: 'Graduate Program Director, Associate Professor', email: 'lori.scarlatos@stonybrook.edu', description: 'Educational technology; tangible, physical, multi-modal, and collaborative human-computer interfaces; serious games; computer graphics; multimedia' },
+            { type: 'sbu', name: 'Todd L. Pittinsky', badge: 'Stony Brook', title: 'Professor', email: 'todd.pittinsky@stonybrook.edu', description: 'Models intergroup relations in their ecosystems of society, technology, and policy' },
+            { type: 'sbu', name: 'Elizabeth L. Hewitt', badge: 'Stony Brook', title: 'Associate Professor', email: 'elizabeth.hewitt@stonybrook.edu', description: 'Building occupant behavior; social science and behavioral energy research; organizational energy issues; green building design and technology; environmental economics' },
+            { type: 'sbu', name: 'Daniene Byrne', badge: 'Stony Brook', title: 'SUNY PRODiG+ Fellow', description: 'AI and Society, Educational Ecosystems, Co-leader, Wearable Futures VIP' },
+            { type: 'sbu', name: 'Wolf Schäfer', badge: 'Stony Brook', title: 'Chair Emeritus and John S. Toll Professor', description: 'Science, technology, and society (STS); big technoscience projects; automotive ethics; geography and cartography; energy transitions and population growth; global history and global studies' },
+            { type: 'sbu', name: 'Jieshu Wang', badge: 'Stony Brook', title: 'Assistant Professor', description: 'Exploring the human and social dimensions of AI: the future of work, sustainability, equality and inclusion in AI development, and our collective imaginaries of the future.' },
+            { type: 'sbu', name: 'Thomas S. Woodson', badge: 'Stony Brook', title: 'Associate Professor', description: 'Innovation Systems; bibliometrics; science and technology policy; international development' },
+            { type: 'sbu', name: 'Yan Xiao', badge: 'Stony Brook', title: 'Lecturer', description: 'Public policy; Art, culture, and technology' },
+            { type: 'sbu', name: 'Ben Z. Zhang', badge: 'Stony Brook', title: 'Assistant Professor', description: 'Human-computer interaction (HCI), Human-Centered AI, Responsible AI, Social Computing, Science, Technology, and Society (STS), Global Development' },
+            { type: 'suny', name: 'Maurice X. Bess', badge: 'SUNY Korea', title: 'Research Professor', office: 'B-321', email: 'maurice.bess@stonybrook.edu', links: [{label: 'LinkedIn', url: 'https://www.linkedin.com/in/mxbess/'}] },
+            { type: 'suny', name: 'Suzana Brown', badge: 'SUNY Korea', title: 'Teaching Associate Professor', office: 'B-310', email: 'suzana.brown@stonybrook.edu' },
+            { type: 'suny', name: 'Joseph S. Cabuay', badge: 'SUNY Korea', title: 'Teaching Associate Professor', office: 'B-311', email: 'joseph.cabuay@sunykorea.ac.kr' },
+            { type: 'suny', name: 'Neal Dreamson', badge: 'SUNY Korea', title: 'Graduate Program Director / Associate Professor', office: 'B-304', email: 'neal.dreamson@sunykorea.ac.kr', links: [{label: 'Google Scholar', url: 'https://scholar.google.com/citations?user=LH0DyEgAAAAJ&hl=en&authuser=2'}] },
+            { type: 'suny', name: 'Changdeok Gim', badge: 'SUNY Korea', title: 'Assistant Professor', office: 'B-306', email: 'changdeok.gim@sunykorea.ac.kr', description: 'Environmental policy and climate change adaptation; institutional management for infrastructure resilience; sociotechnical systems; disaster risk governance; the water–energy nexus; environmental law and governance; and the institutional analysis of interdependent infrastructures' },
+            { type: 'suny', name: 'Suhyeong Kim', badge: 'SUNY Korea', title: 'Adjunct Professor', office: 'A-610', email: 'suhyeong.kim@sunykorea.ac.kr' },
+            { type: 'suny', name: 'James F. Larson', badge: 'SUNY Korea', title: 'Professor Emeritus', office: 'B-308', email: 'jamesflarson@sunykorea.ac.kr', links: [{label: 'LinkedIn', url: 'https://www.linkedin.com/in/jamesflarson/'}] },
+            { type: 'suny', name: 'Jinsang Lee', badge: 'SUNY Korea', title: 'Adjunct Professor', office: 'B-608', email: 'jinsang.lee@sunykorea.ac.kr', links: [{label: 'LinkedIn', url: 'https://www.linkedin.com/in/lee-jinsang-%EC%9D%B4%EC%A7%84%EC%83%81-3a9aaba2'}] },
+            { type: 'suny', name: 'Johng-Ihl Lee', badge: 'SUNY Korea', title: 'Leading Professor', office: 'A-414 or B-307', email: 'anothermile@sunykorea.ac.kr', links: [{label: 'Google Scholar', url: 'https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=johng-ihl+lee&oq'}] },
+            { type: 'suny', name: 'Yeong Geun Lee', badge: 'SUNY Korea', title: 'Leading Professor', office: 'A-510', email: 'yg0121@sunykorea.ac.kr' },
+            { type: 'suny', name: 'Hyung Ryul Ma', badge: 'SUNY Korea', title: 'Adjunct Professor', office: 'A-610', email: 'hyoungryul.ma@sunykorea.ac.kr', links: [{label: 'LinkedIn', url: 'https://www.linkedin.com/in/hyoung-ryul-ma-henry-10b08910a/'}] },
+            { type: 'suny', name: 'Sangchan Park', badge: 'SUNY Korea', title: 'Chair / Professor', office: 'A-309', email: 'sangchan.park@sunykorea.ac.kr', links: [{label: 'ORCID', url: 'https://orcid.org/0000-0003-4488-3258'}] },
+            { type: 'suny', name: 'Sehee Park', badge: 'SUNY Korea', title: 'Adjunct Professor', office: 'B-610', email: 'sehee.park@sunykorea.ac.kr' },
+            { type: 'suny', name: 'Anthony Pennings', badge: 'SUNY Korea', title: 'Undergraduate Program Director / Teaching Professor', office: 'A-309', email: 'anthony.pennings@sunykorea.ac.kr', links: [{label: 'Website', url: 'https://apennings.com/'}] }
+        ];
+
+        const nameInput = document.getElementById('facultySearchInput');
+        const noResults = document.getElementById('noResultsMessage');
+
+        function renderFacultyList() {
+            document.getElementById('facultyList').innerHTML = facultyData.map(faculty => {
+                const rows = [];
+                if (faculty.title) rows.push(`<div class="info-row"><strong>Title:</strong> <span>${faculty.title}</span></div>`);
+                if (faculty.office) rows.push(`<div class="info-row"><strong>Office:</strong> <span>${faculty.office}</span></div>`);
+                if (faculty.email) rows.push(`<div class="info-row"><strong>Email:</strong> <a href="mailto:${faculty.email}">${faculty.email}</a></div>`);
+                if (faculty.links?.length) rows.push(`<div class="info-row"><strong>Links:</strong> ${faculty.links.map(link => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join(' ')}</div>`);
+
+                return `
+                    <div class="faculty-card" data-type="${faculty.type}">
+                        <div class="faculty-photo-box">
+                            <div class="photo-placeholder">${faculty.name.replace(/ /g, '<br>')}<br>PHOTO</div>
+                        </div>
+                        <div class="faculty-info">
+                            <a href="#" class="name">${faculty.name} <span class="faculty-badge ${faculty.type === 'sbu' ? 'badge-sbu' : 'badge-suny'}">${faculty.badge}</span></a>
+                            ${rows.join('')}
+                            ${faculty.description ? `<div class="faculty-description">${faculty.description}</div>` : ''}
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function switchTab(type, buttonElement) {
+            const buttons = document.querySelectorAll('.faculty-tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('sbu-active');
+            });
+
+            buttonElement.classList.add('active');
+            if (type === 'sbu') {
+                buttonElement.classList.add('sbu-active');
+            }
+
+            currentTabType = type;
+            filterFaculty();
+        }
+
+        function filterFaculty() {
+            const searchKeyword = nameInput.value.toLowerCase().trim();
+            let showCount = 0;
+            const cards = document.querySelectorAll('.faculty-card');
+
+            cards.forEach(card => {
+                const cardType = card.getAttribute('data-type');
+                const profName = card.querySelector('.name').textContent.toLowerCase();
+                const matchClass = cardType === currentTabType;
+                const matchKeyword = searchKeyword === '' || profName.includes(searchKeyword);
+
+                card.classList.toggle('hidden', !(matchClass && matchKeyword));
+                if (matchClass && matchKeyword) showCount++;
+            });
+
+            noResults.style.display = showCount === 0 ? 'block' : 'none';
+        }
+
+        nameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterFaculty();
+            }
+        });
+        nameInput.addEventListener('input', filterFaculty);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderFacultyList();
+            filterFaculty();
+        });
+    </script>
+</body>
+</html>

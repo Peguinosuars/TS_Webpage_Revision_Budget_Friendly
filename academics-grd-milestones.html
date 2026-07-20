@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Milestones - Technology and Society</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
+    
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+        --sidebar-active-blue: #004488;
+    }
+
+    header { background: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo-container { display: flex; align-items: center; height: 55px; }
+    .logo-container img { height: 100%; width: auto; object-fit: contain; }
+    
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
+
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; }
+
+    .sub-banner { 
+        background: linear-gradient(rgba(0, 34, 68, 0.4), rgba(0, 34, 68, 0.5)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; 
+        width: 100%;
+        height: 350px;
+    }
+
+    .sub-page-container { max-width: 1240px; margin: 60px auto; padding: 0 20px; display: flex; gap: 50px; align-items: flex-start; }
+
+    .left-sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 110px; }
+    .left-sidebar h2 { font-size: 1.8rem; color: var(--suny-navy); padding-bottom: 15px; border-bottom: 2px solid var(--suny-navy); margin-bottom: 15px; font-weight: bold; }
+    
+    .sidebar-accordion { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+    .accordion-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background-color: #fff; color: var(--suny-navy); font-weight: bold; font-size: 1rem; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .accordion-header:hover { background-color: #f8f9fa; color: var(--suny-red); }
+    .accordion-header span { font-size: 0.8rem; transition: transform 0.3s; }
+
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; list-style: none; padding-left: 10px; }
+    .accordion-content li a { display: block; padding: 10px 15px; color: #555; font-size: 0.9rem; font-weight: 500; border-bottom: 1px solid #edf2f7; transition: all 0.2s; }
+    .accordion-content li a:hover { color: var(--suny-red); padding-left: 20px; }
+    
+    .accordion-content li a.active { color: var(--sidebar-active-blue); font-weight: bold; }
+    .accordion-content li a.active::before { content: "• "; color: var(--sidebar-active-blue); }
+
+    .accordion-item.open .accordion-header { background-color: #edf2f7; color: var(--suny-navy); }
+    .accordion-item.open .accordion-header span { transform: rotate(180deg); }
+    .accordion-item.open .accordion-content { max-height: 200px; }
+
+    .sub-page-wrapper { flex-grow: 1; min-height: 600px; width: 0; }
+    .breadcrumb-top { display: flex; justify-content: flex-end; font-size: 0.85rem; color: #666; margin-bottom: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+
+    .sub-page-header { margin-bottom: 40px; border-bottom: 3px solid var(--suny-red); padding-bottom: 15px; }
+    .sub-page-header h2 { font-size: 2.2rem; color: var(--suny-navy); font-weight: 700; }
+    
+    .content-container { background: white; padding: 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: none; }
+    .drawer-overlay.show { display: block; }
+    .nav-drawer { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: #ffffff; box-shadow: -2px 0 10px rgba(0,0,0,0.1); z-index: 2002; transition: right 0.3s ease; padding: 40px 20px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+
+    .section-title { font-size: 1.6rem; color: var(--suny-navy); font-weight: 700; margin-bottom: 25px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .overview-table { width: 100%; border-collapse: collapse; margin-bottom: 35px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #cbd5e1; table-layout: fixed; }
+    .overview-table th { background: var(--suny-navy); color: #fff; padding: 15px; font-weight: 700; font-size: 1.1rem; text-align: center; width: 50%; border: 1px solid var(--suny-navy); }
+    .overview-table td { padding: 22px; vertical-align: top; border: 1px solid #cbd5e1; background: #f8fafc; width: 50%; }
+    .overview-table tr:nth-child(even) td { background: #ffffff; }
+    .overview-year-title { font-size: 1.15rem; color: var(--suny-red); font-weight: 800; margin-bottom: 12px; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; }
+    
+    .course-list { list-style: none; padding-left: 5px; }
+    .course-list li { font-size: 0.95rem; color: #334155; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; display: flex; justify-content: space-between; }
+    .course-list li:last-child { border-bottom: none; }
+
+    .spec-trigger { width: 100%; padding: 18px 25px; background: #ffffff; color: var(--suny-navy); border: 1px solid #cbd5e1; outline: none; text-align: left; font-size: 1.2rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s ease; }
+    .spec-trigger:hover { background: #f8fafc; color: var(--suny-red); }
+    
+    .active-tab-card {
+        background: var(--suny-navy) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(0,34,68,0.15);
+        border-color: var(--suny-navy) !important;
+    }
+
+    .notes-box { background: #fffbeb; border: 1px solid #fef08a; border-left: 6px solid #eab308; padding: 25px; border-radius: 8px; margin-bottom: 10px; }
+    .notes-box h4 { color: #ca8a04; font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .notes-box ul { list-style-type: square; padding-left: 20px; }
+    .notes-box li { font-size: 0.98rem; color: #4a5568; margin-bottom: 8px; line-height: 1.6; }
+    .notes-box li strong { color: #1a202c; }
+
+    footer { background: var(--suny-navy); color: #fff; text-align: center; padding: 20px; margin-top: 60px; font-size: .9rem; }
+
+    @media (max-width: 1024px) {
+        .sub-page-container { flex-direction: column; gap: 40px; }
+        .left-sidebar { width: 100%; position: static; }
+    }
+    @media (max-width: 768px) {
+        .overview-table, .overview-table tbody, .overview-table tr, .overview-table td, .overview-table th { display: block; width: 100% !important; }
+        .tab-menu-grid { grid-template-columns: 1fr !important; }
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <div style="height: 50px; width: 250px; background: #e0e0e0; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #555; font-weight: bold; border-radius: 4px;">LOGO IMAGE PLACEHOLDER</div>
+            </a>
+        </div>
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+    <div class="nav-drawer" id="navDrawer"></div>
+
+    <section class="sub-banner"></section>
+
+    <div class="sub-page-container">
+        
+        <nav class="left-sidebar">
+            <h2>Academics</h2>
+            <ul class="sidebar-accordion">
+                <li class="accordion-item" id="ugrd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('ugrd-item')">
+                        Undergraduate (UGRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-ugrd-program.html">Program</a></li>
+                        <li><a href="academics-ugrd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-ugrd-milestones.html">Milestones</a></li>
+                        <li><a href="academics-ugrd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+                <li class="accordion-item open" id="grd-item">
+                    <div class="accordion-header" onclick="toggleSidebarMenu('grd-item')">
+                        Graduate (GRD) <span>▼</span>
+                    </div>
+                    <ul class="accordion-content">
+                        <li><a href="academics-grd-program.html">Program</a></li>
+                        <li><a href="academics-grd-catalog.html">Catalog</a></li>
+                        <li><a href="academics-grd-milestones.html" class="active">Milestones</a></li>
+                        <li><a href="academics-grd-courses.html">Courses</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sub-page-wrapper">
+            <div class="breadcrumb-top">ACADEMICS &gt; GRD &gt; MILESTONES</div>
+
+            <div class="sub-page-header">
+                <h2>Graduate Milestones</h2>
+            </div>
+
+            <div class="content-container">
+    
+                <p style="color: #666; margin-bottom: 35px;">The following shows the general degree milestones for Graduate Programs.</p>
+
+                <div class="section-title">✨ Graduate Program Milestones</div>
+                
+                <div class="tab-menu-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 35px;">
+                    <button type="button" class="spec-trigger active-tab-card" id="tab-btn-0" onclick="switchMilestoneTab(0)" style="border-radius: 8px; justify-content: center; padding: 15px; font-size: 1.1rem;">Accelerated BS/MS</button>
+                    <button type="button" class="spec-trigger" id="tab-btn-1" onclick="switchMilestoneTab(1)" style="border-radius: 8px; justify-content: center; padding: 15px; font-size: 1.1rem;">Master of Science (M.S.)</button>
+                    <button type="button" class="spec-trigger" id="tab-btn-2" onclick="switchMilestoneTab(2)" style="border-radius: 8px; justify-content: center; padding: 15px; font-size: 1.1rem;">Ph.D. Program</button>
+                </div>
+
+                <div class="milestone-tab-panel" id="panel-0" style="display: block;">
+                    <table class="overview-table">
+                            <tr>
+                                <td>
+                                    <div class="overview-year-title">1st Semester (Senior - 1)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 581 or EST 582</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div class="overview-year-title">2nd Semester (Senior - 2)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 581 or EST 582</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="overview-year-title">3rd Semester (MS - 1)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 502</li>
+                                        <li>• EMP 501</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div class="overview-year-title">4th Semester (MS - 2)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 590</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="notes-box">
+                        <h4>⚠️ Caution & Requirements</h4>
+                        <ul>
+                            <li>Each <strong><a href="https://catalog.stonybrook.edu/preview_program.php?catoid=12&poid=1763&returnto=1356" target="_blank">concentration</a></strong> requires 30 credits (10 courses) of classwork plus a Master’s project completed under the supervision of a faculty member.</li>
+                            <li>The graduate school requires a minimum 3.0 GPA for degree completion.</li>
+                            <li>For Accelerated BS/MS students, enrollment into the Master’s program must begin immediately upon completion of the Bachelor’s degree, and the Master's program must be completed within one year.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="milestone-tab-panel" id="panel-1" style="display: none;">
+                    <table class="overview-table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="overview-year-title">1st Semester (G1)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 581 or EST 582 or EST 502 or EMP 501</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div class="overview-year-title">2nd Semester (G1)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 581 or EST 582 or EST 502 or EMP 501</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="overview-year-title">3rd Semester (G2)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 581 or EST 582 or EST 502 or EMP 501</li>
+                                        <li>• EST 590</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="notes-box">
+                        <h4>⚠️ Caution & Requirements</h4>
+                        <ul>
+                            <li>Each <strong><a href="https://catalog.stonybrook.edu/preview_program.php?catoid=12&poid=1763&returnto=1356" target="_blank">concentration</a></strong> requires 30 credits (10 courses) of classwork plus a Master’s project completed under the supervision of a faculty member.</li>
+                            <li>The graduate school requires a minimum 3.0 GPA for degree completion.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="milestone-tab-panel" id="panel-2" style="display: none;">
+                    <table class="overview-table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="overview-year-title">1st Semester (G3)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 600 or EST 610</li>
+                                        <li>• EST 600 or EST 610</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div class="overview-year-title">2nd Semester (G3)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 625</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="overview-year-title">3rd Semester (G3)</div>
+                                    <ul class="course-list">
+                                        <li>• Recommended semester to visit SBU for<br>>  SOC 501 or POL 502<br>>  Part A Preparation</li>
+                                        <li>• SOC 501 or POL 501</li>
+                                        <li>• 1 Elective</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div class="overview-year-title">4th Semester (G4)</div>
+                                    <ul class="course-list">
+                                        <li>• Recommended semester to visit SBU for<br>>  SOC 501 or POL 502<br>>  Part A Preparation</li>
+                                        <li>• SOC 502 or POL 502</li>
+                                        <li>• EST 697</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="overview-year-title">5th Semester (G5)</div>
+                                    <ul class="course-list">
+                                        <li>• Teaching Prac.</li>
+                                        <li>• 1 Elective</li>
+                                    </ul>
+                                </td>
+                                <td>
+                                    <div class="overview-year-title">6th Semester (G5)</div>
+                                    <ul class="course-list">
+                                        <li>• EST 699</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="notes-box">
+                        <h4>⚠️ Caution & Requirements</h4>
+                        <ul>
+                            <li>Ph.D. students require continuous full-time enrollment and residency during their SBU visit semesters.</li>
+                            <li><strong>SOC 501, SOC502, POL501, POL502 are not offered at SUNY Korea.</strong> Students must complete these courses during their SBU visiting semesters.</li>
+                            <li>Failure to pass the Qualifying Examination within the approved timeline may result in program review.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+<script>
+function switchMilestoneTab(index) {
+    for (let i = 0; i < 3; i++) {
+        const btn = document.getElementById(`tab-btn-${i}`);
+        if (i === index) {
+            btn.classList.add('active-tab-card');
+        } else {
+            btn.classList.remove('active-tab-card');
+        }
+    }
+
+    for (let i = 0; i < 3; i++) {
+        const panel = document.getElementById(`panel-${i}`);
+        if (i === index) {
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    }
+}
+
+function toggleSidebarMenu(itemId){
+    document.querySelectorAll('.accordion-item').forEach(item => {
+        item.id === itemId ? item.classList.toggle('open') : item.classList.remove('open');
+    });
+}
+
+function toggleDrawer(){
+    const d = document.getElementById('navDrawer'), o = document.getElementById('drawerOverlay');
+    if(d && o){ d.classList.toggle('open'); o.classList.toggle('show'); }
+}
+</script>
+</body>
+</html>
