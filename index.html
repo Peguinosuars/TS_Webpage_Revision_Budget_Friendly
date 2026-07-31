@@ -1,434 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technology and Society - SUNY Korea</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technology and Society - SUNY Korea</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    html { scroll-behavior: smooth; }
+    body { background-color: #f4f6f8; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; cursor: pointer; }
     
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Poppins', 'Noto Sans KR', sans-serif;
-            color: #333;
-            background-color: #fff;
-            line-height: 1.5;
-        }
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+    :root {
+        --suny-red: #990000;
+        --suny-navy: #002244;
+    }
 
-        /* --- Header --- */
-        header {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .logo-placeholder {
-            font-weight: 700;
-            font-size: 14px;
-            color: #005A9C;
-            line-height: 1.2;
-        }
-        .logo-placeholder span {
-            color: #C8102E;
-        }
-        .logo-placeholder .dept-title {
-            color: #333;
-            display: block;
-            font-size: 13px;
-            margin-top: 2px;
-        }
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-        nav ul li a {
-            font-size: 15px;
-            font-weight: 500;
-            color: #222;
-            transition: color 0.2s;
-        }
-        nav ul li a:hover {
-            color: #C8102E;
-        }
-        .header-icons {
-            display: flex;
-            gap: 20px;
-            font-size: 18px;
-            cursor: pointer;
-        }
+    header { 
+        background: white; 
+        padding: 15px 50px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        position: sticky; 
+        top: 0; 
+        z-index: 1000; 
+    }
 
-        .hero {
-            width: 100%;
-            height: 480px;
-            position: relative;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat;
-            display: flex;
-            align-items: center;
-        }
-        .hero-content {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            color: #fff;
-        }
-        .hero h1 {
-            font-size: 44px;
-            font-weight: 700;
-            color: #F4C430;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
-        }
-        .hero p {
-            font-size: 38px;
-            font-weight: 600;
-            line-height: 1.2;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .btn-circle {
-            width: 45px;
-            height: 45px;
-            background-color: #0088cc;
-            border-radius: 50%;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
+    .logo-container { 
+        display: flex; 
+        align-items: center; 
+        height: 55px; 
+        gap: 0; 
+    }
+    .logo-container a { 
+        display: flex; 
+        align-items: center; 
+        height: 100%; 
+    }
+    .logo-container img { 
+        height: 100%; 
+        width: auto; 
+        object-fit: contain; 
+        display: block;
+    }
 
-        main {
-            max-width: 1200px;
-            margin: 50px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1.3fr;
-            gap: 50px;
-        }
+    .nav-right-area { display: flex; align-items: center; gap: 20px; }
+    .search-tab { display: flex; align-items: center; background: #f0f2f5; padding: 6px 12px; border-radius: 20px; border: 1px solid #e0e0e0; }
+    .search-tab input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 130px; }
+    .search-tab button { background: none; border: none; font-size: 0.9rem; color: #666; margin-left: 5px; }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
-        }
-        .section-title .plus {
-            font-weight: 300;
-            color: #999;
-            cursor: pointer;
-        }
+    .more-toggle-btn { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; z-index: 2001; }
+    .more-toggle-btn span { width: 24px; height: 3px; background-color: var(--suny-navy); border-radius: 2px; transition: 0.3s; }
+    .more-toggle-btn:hover span { background-color: var(--suny-red); }
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 2px solid #333;
-        }
-        .pagination .current { font-weight: 700; }
-        .pagination .total { color: #999; }
-        .pagination i { cursor: pointer; color: #666; }
+    .nav-drawer { position: fixed; top: 0; right: -380px; width: 380px; height: 100%; background: #ffffff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); transition: right 0.4s ease; z-index: 2000; padding: 80px 30px 40px 30px; overflow-y: auto; }
+    .nav-drawer.open { right: 0; }
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1999; }
+    .drawer-overlay.show { display: block; }
 
-        .announcement-img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            background-color: #eee;
-        }
-        .announcement-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .announcement-item {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-        .announcement-item:last-child {
-            border-bottom: none;
-        }
-        .announcement-tag {
-            color: #C8102E;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-        .announcement-name {
-            font-size: 14px;
-            font-weight: 500;
-            margin-top: 2px;
-            color: #444;
-        }
+    .menu-category { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .menu-category > h3 { font-size: 1.15rem; color: var(--suny-navy); padding: 10px 5px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .menu-category > h3:hover { color: var(--suny-red); }
+    .menu-category > h3 .arrow { font-size: 0.8rem; transition: transform 0.3s ease; color: #999; }
+    .menu-category.active > h3 .arrow { transform: rotate(180deg); color: var(--suny-red); }
 
-        .spotlight-box {
-            position: relative;
-            width: 100%;
-            height: 180px;
-            background-color: #ddd;
-            overflow: hidden;
-        }
-        .spotlight-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .spotlight-caption {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .schedule-box {
-            margin-top: 40px;
-        }
-        .schedule-box img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background-color: #eee;
-        }
+    .drawer-sub-menu { list-style: none; padding-left: 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .menu-category.active .drawer-sub-menu { max-height: 800px; margin-top: 5px; margin-bottom: 10px; }
+    .menu-category li { margin-bottom: 12px; }
+    .menu-category a { font-size: 0.95rem; color: #555; font-weight: 600; transition: 0.2s; display: block; }
+    .menu-category a:hover { color: var(--suny-red); padding-left: 5px; }
 
-        /* Column 3: News */
-        .news-list {
-            display: flex;
-            flex-direction: column;
-        }
-        .news-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 20px;
-            padding: 20px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .news-item:first-child { padding-top: 0; }
-        .news-item:last-child { border-bottom: 2px solid #333; }
-        
-        .news-text {
-            flex: 1;
-        }
-        .news-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            line-height: 1.4;
-            margin-bottom: 6px;
-        }
-        .news-desc {
-            font-size: 12px;
-            color: #777;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .news-date {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
-            min-width: 54px;
-            line-height: 1.1;
-        }
-        .news-date .day {
-            font-size: 20px;
-            font-weight: 700;
-            color: #333;
-            display: block;
-        }
-        .news-date .year-month {
-            font-size: 10px;
-            color: #888;
-            margin-top: 3px;
-            display: block;
-        }
+    .sub-depth-group { margin-top: 10px; padding-left: 5px; }
+    .sub-depth-title { font-size: 0.9rem; color: var(--suny-navy); font-weight: bold; display: block; margin-bottom: 5px; }
+    .sub-depth-links { padding-left: 15px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .sub-depth-links a { font-weight: 500; color: #666; font-size: 0.88rem; }
 
-        @media (max-width: 900px) {
-            main {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-            nav { display: none; }
-        }
-    </style>
+    .hero { background: linear-gradient(rgba(0, 34, 68, 0.7), rgba(0, 34, 68, 0.7)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover; color: white; text-align: center; padding: 130px 20px 180px 20px; }
+    .hero h1 { font-size: 3.5rem; margin-bottom: 20px; letter-spacing: 1px; }
+    .hero p { font-size: 1.2rem; margin-bottom: 30px; color: #e0e0e0; }
+    .btn-explore { display: inline-block; background: var(--suny-red); color: white; padding: 15px 35px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; box-shadow: 0 4px 15px rgba(153, 0, 0, 0.4); }
+    .btn-explore:hover { background: #7a0000; transform: translateY(-3px); }
+
+    .action-row { display: flex; gap: 25px; justify-content: center; max-width: 1200px; margin: -80px auto 60px auto; padding: 0 20px; position: relative; z-index: 10; }
+    .action-btn { flex: 1; background: white; padding: 35px 25px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.15); transition: 0.3s; border-bottom: 6px solid var(--suny-navy); }
+    .action-btn:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+    .action-btn.red-theme { border-bottom-color: var(--suny-red); }
+    .action-btn h3 { color: var(--suny-navy); font-size: 1.5rem; margin-bottom: 10px; }
+    .action-btn.red-theme h3 { color: var(--suny-red); }
+    .action-btn p { font-size: 0.95rem; color: #666; margin-bottom: 20px; }
+    .action-btn span { display: inline-block; font-weight: bold; color: var(--suny-navy); background: #f0f4f8; padding: 8px 20px; border-radius: 30px; font-size: 0.9rem; }
+    .action-btn:hover span { background: var(--suny-navy); color: white; }
+    .action-btn.red-theme:hover span { background: var(--suny-red); color: white; }
+
+    .content-split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto 60px auto; padding: 0 20px; align-items: start; }
+    
+    .section-title-link { display: block; font-size: 1.8rem; color: var(--suny-navy); margin-bottom: 25px; border-bottom: 2px solid #ddd; padding-bottom: 10px; text-transform: uppercase; width: 100%; transition: color 0.2s, border-color 0.2s; }
+    .section-title-link:hover { color: var(--suny-red); border-color: var(--suny-red); }
+
+    .news-container { background: white; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); border-top: 5px solid var(--suny-red); display: flex; flex-direction: column; overflow: hidden; }
+    .news-list-group { list-style: none; display: flex; flex-direction: column; }
+    .news-item-row { display: flex; gap: 15px; padding: 18px 20px; border-bottom: 1px solid #edf2f7; align-items: center; transition: background 0.2s; }
+    .news-item-row:last-child { border-bottom: none; }
+    .news-item-row:hover { background-color: #fafbfc; }
+    .news-thumb-mini { width: 60px; height: 60px; background: linear-gradient(135deg, #002244, #00509e); border-radius: 6px; flex-shrink: 0; }
+    .news-info-side { display: flex; flex-direction: column; gap: 2px; }
+    .news-meta-date { font-size: 0.78rem; color: var(--suny-red); font-weight: bold; }
+    .news-info-side h5 { font-size: 0.95rem; color: #333; font-weight: 600; line-height: 1.4; transition: color 0.2s; }
+    .news-item-row:hover h5 { color: var(--suny-red); }
+
+    .notice-container { background: white; padding: 10px 20px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.08); border-top: 5px solid var(--suny-navy); display: flex; flex-direction: column; }
+    .notice-list-group { list-style: none; display: flex; flex-direction: column; }
+    .notice-item { border-bottom: 1px solid #edf2f7; padding: 16px 0; display: flex; flex-direction: column; gap: 6px; transition: background 0.2s; }
+    .notice-item:last-child { border-bottom: none; }
+    .notice-tag-row { display: flex; justify-content: space-between; align-items: center; }
+    .notice-badge { background: #f0f4f8; color: var(--suny-navy); font-size: 0.75rem; font-weight: bold; padding: 2px 10px; border-radius: 4px; }
+    .notice-badge.urgent { background: rgba(153, 0, 0, 0.1); color: var(--suny-red); }
+    .notice-item-date { font-size: 0.8rem; color: #888; }
+    .notice-item h5 { font-size: 0.95rem; color: #333; font-weight: 600; transition: color 0.2s; }
+    .notice-item:hover h5 { color: var(--suny-red); }
+
+    .bottom-calendar-section { max-width: 1200px; margin: 40px auto 80px auto; padding: 0 20px; clear: both; }
+    .calendar-card { display: grid; grid-template-columns: 2.2fr 0.8fr; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border-left: 6px solid var(--suny-red); }
+    
+    .calendar-body-side { padding: 40px; background: #ffffff; }
+    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; color: var(--suny-navy); }
+    .calendar-header h3 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
+    
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; text-align: center; }
+    .calendar-weekday { font-size: 0.85rem; font-weight: bold; color: #666; padding-bottom: 12px; border-bottom: 2px solid #edf2f7; text-transform: uppercase; }
+    .calendar-weekday.sunday { color: var(--suny-red); }
+    .calendar-day { padding: 16px 0; font-size: 1.05rem; font-weight: 600; color: #333; border-radius: 8px; position: relative; transition: 0.2s; }
+    
+    .calendar-day.has-event { background: rgba(153, 0, 0, 0.05); color: var(--suny-red); font-weight: bold; cursor: pointer; }
+    .calendar-day.has-event::after { content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 6px; height: 6px; background: var(--suny-red); border-radius: 50%; }
+    
+    .calendar-day.has-univ-event { background: rgba(0, 34, 68, 0.05); color: var(--suny-navy); }
+    .calendar-day.has-univ-event::after { background: var(--suny-navy); }
+
+    .calendar-day.has-event:hover { background: var(--suny-red); color: white; }
+    .calendar-day.has-univ-event:hover { background: var(--suny-navy); color: white; }
+    .calendar-day:hover::after { background: white !important; }
+
+    .calendar-day .tooltip-box {
+        visibility: hidden;
+        width: 240px;
+        background-color: var(--suny-navy);
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 12px 16px;
+        position: absolute;
+        z-index: 100;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.2s, transform 0.2s;
+        font-size: 0.85rem;
+        font-weight: normal;
+        line-height: 1.4;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .calendar-day .tooltip-box::after {
+        content: ""; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: var(--suny-navy) transparent transparent transparent;
+    }
+    .calendar-day:hover .tooltip-box { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(-2px); }
+
+    .calendar-preview-side { background: #fefcf0; padding: 40px 25px; border-left: 1px dashed #eadea6; display: flex; flex-direction: column; position: relative; }
+    .calendar-preview-side::before { content: '📌'; position: absolute; top: 15px; right: 15px; font-size: 1.1rem; }
+    .calendar-preview-side h4 { color: #5c5230; font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eadea6; padding-bottom: 8px; }
+    
+    .preview-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .preview-item { font-size: 0.88rem; display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+    .preview-date-badge { background: #5c5230; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: bold; text-transform: uppercase; }
+    .preview-date-badge.dept { background: var(--suny-red); }
+    .preview-item h5 { font-size: 0.88rem; color: #443e2a; font-weight: 600; line-height: 1.3; }
+
+    footer { background: #1a1a1a; color: #ccc; text-align: center; padding: 40px 20px; margin-top: 100px; }
+
+    @media (max-width: 950px) {
+        .content-split { grid-template-columns: 1fr; gap: 30px; }
+        .calendar-card { grid-template-columns: 1fr; }
+        .calendar-preview-side { border-left: none; border-top: 1px dashed #e2d9b7; padding: 30px; }
+    }
+</style>
 </head>
 <body>
 
     <header>
-        <div class="logo-area">
-            <div class="logo-placeholder">
-                SUNY Korea | <span>Stony Brook University</span>
-                <span class="dept-title">Technology and Society</span>
-            </div>
+        <div class="logo-container">
+            <a href="https://www.sunykorea.ac.kr/" target="_blank">
+                <img src="logo_univ.png" alt="SUNY Korea & Stony Brook University">
+            </a>
+            <a href="index.html">
+                <img src="logo_dept.png" alt="Technology and Society">
+            </a>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">People</a></li>
-                <li><a href="#">Research</a></li>
-                <li><a href="#">Programs</a></li>
-                <li><a href="#">Courses</a></li>
-            </ul>
-        </nav>
-        <div class="header-icons">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-solid fa-bars"></i>
+        
+        <div class="nav-right-area">
+            <div class="search-tab"><input type="text" placeholder="Search..."><button>🔍</button></div>
+            <div class="more-toggle-btn" onclick="toggleDrawer()"><span></span><span></span><span></span></div>
         </div>
     </header>
 
+    <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+    <div class="nav-drawer" id="navDrawer">
+        <div class="menu-category">
+            <h3 onclick="toggleAccordion(this)">ABOUT <span class="arrow">▼</span></h3>
+            <ul class="drawer-sub-menu">
+                <li><a href="about-what.html">What is TS</a></li>
+                <li><a href="about-why.html">Why TS?</a></li>
+                <li><a href="about-chair.html">Message from the Chair</a></li>
+                <li><a href="about-mission.html">Mission & History & Vision</a></li>
+                <li><a href="about-contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-category">
+            <h3 onclick="toggleAccordion(this)">PEOPLE <span class="arrow">▼</span></h3>
+            <ul class="drawer-sub-menu">
+                <li><a href="people-faculty.html">Faculty</a></li>
+                <li><a href="people-staff.html">Administrative Staff</a></li>
+            </ul>
+        </div>
+        
+        <div class="menu-category">
+            <h3 onclick="toggleAccordion(this)">ACADEMICS <span class="arrow">▼</span></h3>
+            <div class="drawer-sub-menu">
+                <div class="sub-depth-group">
+                    <span class="sub-depth-title">Undergraduate (UGRD)</span>
+                    <div class="sub-depth-links">
+                        <a href="academics-ugrd-program.html">• Program</a>
+                        <a href="academics-ugrd-catalog.html">• Catalog</a>
+                        <a href="academics-ugrd-milestones.html">• Milestones</a>
+                        <a href="academics-ugrd-courses.html">• Courses</a>
+                    </div>
+                </div>
+                <div class="sub-depth-group">
+                    <span class="sub-depth-title">Graduate (GRD)</span>
+                    <div class="sub-depth-links">
+                        <a href="academics-grd-program.html">• Program</a>
+                        <a href="academics-grd-catalog.html">• Catalog</a>
+                        <a href="academics-grd-milestones.html">• Milestones</a>
+                        <a href="academics-grd-courses.html">• Courses</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-category">
+            <h3 onclick="toggleAccordion(this)">COMMUNITY <span class="arrow">▼</span></h3>
+            <ul class="drawer-sub-menu">
+                <li><a href="news-list.html">Department News</a></li>
+                <li><a href="notice-list.html">Announcements</a></li>
+            </ul>
+        </div>
+
+        <div class="menu-category">
+            <h3 onclick="toggleAccordion(this)">USEFUL RESOURCES <span class="arrow">▼</span></h3>
+            <ul class="drawer-sub-menu">
+                <li><a href="resources-faq.html">FAQ</a></li>
+                <li><a href="resources-forms.html">Forms & Documents</a></li>
+            </ul>
+        </div>
+    </div>
+
     <section class="hero">
-        <div class="hero-content">
-            <h1>Technology and Society</h1>
-            <p>
-                History Makers.<br>
-                We Change the World!
-                <span class="btn-circle"><i class="fa-solid fa-arrow-right"></i></span>
-            </p>
+        <h1>History Makers. We Change the World.</h1>
+        <p>Bridging the gap between technological systems and social policy.</p>
+        <a href="about-what.html" class="btn-explore">Explore Our Department</a>
+    </section>
+
+    <div class="action-row">
+        <a href="academics-ugrd-program.html" class="action-btn">
+            <h3>Undergraduate (B.S.)</h3>
+            <p>Discover foundation courses, specializations, and your 4-year academic milestone.</p>
+            <span>Explore UGRD →</span>
+        </a>
+        <a href="academics-grd-program.html" class="action-btn">
+            <h3>Graduate (M.S. / Ph.D.)</h3>
+            <p>Advance your career in tech policy and system management with top researchers.</p>
+            <span>Explore GRD →</span>
+        </a>
+        <a href="https://calendar.app.google/T4xmGEUZs443tNZ16" target="_blank" class="action-btn red-theme">
+            <h3>Need Academic Help?</h3>
+            <p>Book a 1:1 Advising session.</p>
+            <span>Get Support →</span>
+        </a>
+    </div>
+
+    <section class="content-split">
+        <div>
+            <a href="news-list.html" class="section-title-link">Department News ➔</a>
+            <div class="news-container">
+                <ul class="news-list-group">
+                    <li class="news-item-row" onclick="location.href='news-post1.html'">
+                        <div class="news-thumb-mini"></div>
+                        <div class="news-info-side">
+                            <span class="news-meta-date">MAY 28, 2026</span>
+                            <h5>DTS Students Take Grand Prize at Hackathon "The X 2026" with Innovative Offline Security App</h5>
+                        </div>
+                    </li>
+                    <li class="news-item-row" onclick="location.href='news-post2.html'">
+                        <div class="news-thumb-mini"></div>
+                        <div class="news-info-side">
+                            <span class="news-meta-date">MAY 15, 2026</span>
+                            <h5>Dongchan Kim Won Final Grand Prize at MIT Reality Hack</h5>
+                        </div>
+                    </li>
+                    <li class="news-item-row" onclick="location.href='news-post3.html'">
+                        <div class="news-thumb-mini"></div>
+                        <div class="news-info-side">
+                            <span class="news-meta-date">APR 30, 2026</span>
+                            <h5>Professor Neal Dreamson named a Top Scholar (0.5%) by ScholarGPS</h5>
+                        </div>
+                    </li>
+                    <li class="news-item-row" onclick="location.href='news-post4.html'">
+                        <div class="news-thumb-mini"></div>
+                        <div class="news-info-side">
+                            <span class="news-meta-date">APR 12, 2026</span>
+                            <h5>Prof. Anthony Pennings Explores AI and Remote Sensing Solutions for Landslides and Flooding at 2024 UN Public Service Forum</h5>
+                        </div>
+                    </li>
+                    <li class="news-item-row" onclick="location.href='news-post5.html'">
+                        <div class="news-thumb-mini"></div>
+                        <div class="news-info-side">
+                            <span class="news-meta-date">MAR 24, 2026</span>
+                            <h5>Dr. Sangchan Park Honored with 'Service The Prime Award' at Korea Service Grand Prix 2024</h5>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <a href="notice-list.html" class="section-title-link">Announcements ➔</a>
+            <div class="notice-container">
+                <ul class="notice-list-group">
+                    <li class="notice-item" onclick="location.href='notice-post1.html'" style="cursor:pointer;">
+                        <div class="notice-tag-row">
+                            <span class="notice-badge">Graduate School</span>
+                            <span class="notice-item-date">Jun 02, 2026</span>
+                        </div>
+                        <h5>Accelerated BSMS Program Information Session</h5>
+                    </li>
+                    <li class="notice-item" onclick="location.href='notice-post2.html'" style="cursor:pointer;">
+                        <div class="notice-tag-row">
+                            <span class="notice-badge">Graduate School</span>
+                            <span class="notice-item-date">May 29, 2026</span>
+                        </div>
+                        <h5>Graduate Info Session</h5>
+                    </li>
+                    <li class="notice-item" onclick="location.href='notice-post3.html'" style="cursor:pointer;">
+                        <div class="notice-tag-row">
+                            <span class="notice-badge">Policy</span>
+                            <span class="notice-item-date">May 24, 2026</span>
+                        </div>
+                        <h5>New Departmental Policy for ESE 123 Enrollment</h5>
+                    </li>
+                    <li class="notice-item" onclick="location.href='notice-post4.html'" style="cursor:pointer;">
+                        <div class="notice-tag-row">
+                            <span class="notice-badge">Advising</span>
+                            <span class="notice-item-date">May 10, 2026</span>
+                        </div>
+                        <h5>Mandatory Academic Advising Guide for SBU Visiting Students FA26 - SP27</h5>
+                    </li>
+                    <li class="notice-item" onclick="location.href='notice-post5.html'" style="cursor:pointer;">
+                        <div class="notice-tag-row">
+                            <span class="notice-badge">Advising</span>
+                            <span class="notice-item-date">Apr 18, 2026</span>
+                        </div>
+                        <h5>Mandatory Academic Advising Guide for Seniors</h5>
+                    </li>
+                </ul>
+            </div>
         </div>
     </section>
 
-    <main>
-        <section>
-            <div class="section-title">
-                <span>Announcement</span>
-                <span class="plus">+</span>
-            </div>
-                <div class="announcement-main">
-                    <img class="announcement-img" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600" alt="Course Image">
-                    <div class="announcement-tag">Enrollment</div>
-                    <div class="announcement-name">EST 488 Enrollment</div>
+    <section class="bottom-calendar-section">
+        <h2 class="section-title-link" style="border-bottom: 2px solid #ddd; cursor:default; hover:none;">Schedule</h2>
+        <div class="calendar-card">
+            
+            <div class="calendar-body-side">
+                <div class="calendar-header">
+                    <h3>September 2026</h3>
+                    <span style="font-size: 0.8rem; color: #888;">*Hover marked days to check events</span>
                 </div>
-                <div class="announcement-item">
-                    <div class="announcement-tag">Enrollment</div>
-                    <div class="announcement-name">EST 499 Enrollment Procedure</div>
-                </div>
-                <div class="announcement-item">
-                    <div class="announcement-tag">Enrollment</div>
-                    <div class="announcement-name">ESE 123 Enrollment Regulation</div>
-                </div>
-            </div>
-            <div class="pagination">
-                <i class="fa-solid fa-chevron-left"></i>
-                <span class="current">01</span> <span class="total">/ 10</span>
-                <i class="fa-solid fa-chevron-right"></i>
-            </div>
-        </section>
+                <div class="calendar-grid">
+                    <div class="calendar-weekday sunday">S</div><div class="calendar-weekday">M</div><div class="calendar-weekday">T</div><div class="calendar-weekday">W</div><div class="calendar-weekday">Th</div><div class="calendar-weekday">F</div><div class="calendar-weekday">Sa</div>
+                    
+                    <div class="calendar-day empty"></div><div class="calendar-day empty"></div>
+                    
+                    <div class="calendar-day">2</div><div class="calendar-day">3</div><div class="calendar-day">4</div><div class="calendar-day">5</div><div class="calendar-day">6</div><div class="calendar-day">7</div><div class="calendar-day">8</div><div class="calendar-day">9</div>
+                    
+                    <div class="calendar-day has-event has-univ-event">
+                        10
+                        <div class="tooltip-box">🏛️ [University] Fall Course Add/Drop & Swap Deadline</div>
+                    </div>
+                    
+                    <div class="calendar-day">11</div><div class="calendar-day">12</div><div class="calendar-day">13</div><div class="calendar-day">14</div><div class="calendar-day">15</div><div class="calendar-day">16</div><div class="calendar-day">17</div><div class="calendar-day">18</div><div class="calendar-day">19</div><div class="calendar-day">20</div><div class="calendar-day">21</div><div class="calendar-day">22</div><div class="calendar-day">23</div>
+                    
+                    <div class="calendar-day has-event has-univ-event">
+                        24
+                        <div class="tooltip-box">🎈 <div Korean="" Holiday=""></div>Chuseok</div>
+                    </div>
 
-        <section>
-            <div>
-                <div class="section-title">
-                    <span>Undergraduate</span>
-                    <span class="plus">+</span>
-                </div>
-                <div class="spotlight-box">
-                    <img src="https://images.unsplash.com/photo-1677594334053-afe4b41aa0a3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Faculty">
-                    <div class="spotlight-caption">Undergraduate Academic Program</div>
+                    <div class="calendar-day has-event has-univ-event">
+                        25
+                        <div class="tooltip-box">🎈 <div Korean="" Holiday=""></div>Chuseok</div>
+                    </div>
+                    
+                    <div class="calendar-day">26</div><div class="calendar-day">27</div><div class="calendar-day">28</div><div class="calendar-day">29</div><div class="calendar-day">30</div>
                 </div>
             </div>
 
-                <div class="section-title">
-                    <span>Graduate</span>
-                    <span class="plus">+</span>
-                </div>
-                <div class="spotlight-box">
-                    <img src="https://images.unsplash.com/photo-1506377872008-6645d9d29ef7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Faculty">
-                    <div class="spotlight-caption">Graduate Academic Program</div>
-                </div>
+            <div class="calendar-preview-side">
+                <h4>August Note</h4>
+                <ul class="preview-list">
+                    <li class="preview-item">
+                        <span class="preview-date-badge">Aug 27</span>
+                        <h5>[Univ] Fall Semester NSWW</h5>
+                    </li>
+                    <li class="preview-item">
+                        <span class="preview-date-badge">Aug 28</span>
+                        <h5>[Univ] Fall Semester Begins</h5>
+                    </li>
+                    <li class="preview-item">
+                        <span class="preview-date-badge dept">Sep 10</span>
+                        <h5>[UGRD] Course Add & Drop Period Deadline</h5>
+                        <h5>[GRD] Course Add & Drop Period Deadline</h5>
+                        <h5>[GRD] UGRD Students Enrolling in Grad Courses</h5>
+                    </li>
+                    <li class="preview-item">
+                        <span class="preview-date-badge dept">Sep 11 - Sep 17</span>
+                        <h5>[GRD] Swaps by Petition Only</h5>
+                    </li>
+                    <li class="preview-item">
+                        <span class="preview-date-badge dept">Sep 24</span>
+                        <h5>Korean Holiday: Chuseok</h5>
+                    </li>
+                    <li class="preview-item">
+                        <span class="preview-date-badge dept">Sep 25</span>
+                        <h5>Korean Holiday: Chuseok</h5>
+                    </li>
+                </ul>
             </div>
-        </section>
 
-        <section>
-            <div class="section-title">
-                <span>News</span>
-                <span class="plus">+</span>
-            </div>
-            <div class="news-list">
-                <div class="news-item">
-                    <div class="news-text">
-                        <div class="news-title">[Faculty Insight] Prof. Cabuay Addresses AI Governance and Ethics at Internation...</div>
-                        <div class="news-desc">Prof. Cabuay recently delivered the 2nd keynote speech at the 2026 International Conference of...</div>
-                    </div>
-                    <div class="news-date">
-                        <span class="day">22</span>
-                        <span class="year-month">2026.06</span>
-                    </div>
-                </div>
-                <div class="news-item">
-                    <div class="news-text">
-                        <div class="news-title">[Event] 2026 International Conference: "WEAVING THE FUTURE" (Featuring Prof...</div>
-                        <div class="news-desc">Dear DTS Students and Faculty, We are pleased to announce that Prof. Cabuay will be a keynote...</div>
-                    </div>
-                    <div class="news-date">
-                        <span class="day">18</span>
-                        <span class="year-month">2026.06</span>
-                    </div>
-                </div>
-                <div class="news-item">
-                    <div class="news-text">
-                        <div class="news-title">New Publication Release: ICT4D & Future Global Sustainability</div>
-                        <div class="news-desc">We are pleased to announce the official release and distribution of ICT4D & Future Global...</div>
-                    </div>
-                    <div class="news-date">
-                        <span class="day">18</span>
-                        <span class="year-month">2026.06</span>
-                    </div>
-                </div>
-                <div class="news-item">
-                    <div class="news-text">
-                        <div class="news-title">DTS Students Take Grand Prize at Hackathon "The X 2026" with Innovativ...</div>
-                        <div class="news-desc">We are absolutely thrilled to share some wonderful news and a deeply proud moment for...</div>
-                    </div>
-                    <div class="news-date">
-                        <span class="day">10</span>
-                        <span class="year-month">2026.06</span>
-                    </div>
-                </div>
-                <div class="news-item">
-                    <div class="news-text">
-                        <div class="news-title">Dongchan Kim Won Final Grand Prize at MIT Reality Hack</div>
-                        <div class="news-desc">The Department of Technology and Society's BS student, Dongchan Kim, has achieved a...</div>
-                    </div>
-                    <div class="news-date">
-                        <span class="day">04</span>
-                        <span class="year-month">2026.02</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <footer><p>&copy; 2026 Department of Technology and Society, SUNY Korea. All rights reserved.</p></footer>
+
+    <script>
+        function toggleDrawer() {
+            document.getElementById('navDrawer').classList.toggle('open');
+            document.getElementById('drawerOverlay').classList.toggle('show');
+        }
+        function toggleAccordion(element) {
+            element.parentElement.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
